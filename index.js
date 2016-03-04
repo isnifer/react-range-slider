@@ -179,6 +179,17 @@ var RangeSlider = React.createClass({
      */
     className: PropTypes.string,
     /**
+     * Slider classname
+     *
+     * Example:
+     * ```
+     *  <RangeSlider className="custom-slider" modClassName="rating" />
+     * ```
+     *
+     * will transform to custom-slider_rating on element
+     */
+    modClassName: PropTypes.string,
+    /**
      * Hook event for when mouse down for each cursor.
      *
      * Example:
@@ -487,6 +498,7 @@ var RangeSlider = React.createClass({
     var bars = this.props.withBars ? this.renderBars(offsets) : null;
     var cursors = this.renderCursors(offsets);
     var className = this.props.className;
+    var mod = this.props.modClassName ? ' ' + this.props.className + '_' + this.props.modClassName : '';
 
     return (
       React.createElement('div', {
@@ -494,7 +506,7 @@ var RangeSlider = React.createClass({
           style: {
             position: 'relative'
           },
-          className: className + ' ' + className + '_' + this.props.orientation
+          className: className + ' ' + className + '_' + this.props.orientation + mod
         },
         React.createElement('div', {
           className: className + '__bars'
