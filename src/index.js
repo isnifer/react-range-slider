@@ -1,13 +1,14 @@
 /*
- * react-range-slider - index.js
+ * react-range-slider-bem - index.js
  * Copyright(c) 2015 xeodou <xeodou@gmail.com>
+ * Copyright(c) 2016 isnifer <isnifer@gmail.com>
  * MIT Licensed
  */
 
 import React, { Component, PropTypes } from 'react';
 import assign from 'object-assign';
-// import event from './event';
-import cursor from './Cursor';
+import { isTouchDevice, dragEventFor, addEvent, removeEvent } from './event';
+import Cursor from './Cursor';
 
 const noop = () => {};
 
@@ -81,11 +82,20 @@ class RangeSlider extends Component {
             value: [],
         };
 
-        this.handleBarClick = this.handleBarClick.bind(this);
-    }
+        this.isTouchDevice = isTouchDevice.bind(this);
+        this.dragEventFor = dragEventFor;
+        this.addEvent = addEvent.bind(this);
+        this.removeEvent = removeEvent.bind(this);
 
-  // Mixin events
-  // mixins: [event],
+        this.getValue = this.getValue.bind(this);
+        this.handleResize = this.handleResize.bind(this);
+        this.handleDragStart = this.handleDragStart.bind(this);
+        this.handleDrag = this.handleDrag.bind(this);
+        this.handleDragEnd = this.handleDragEnd.bind(this);
+        this.handleBarClick = this.handleBarClick.bind(this);
+        this.isHorizontal = this.isHorizontal.bind(this);
+        this.calcOffset = this.calcOffset.bind(this);
+    }
 
     componentWillMount() {
         this.componentWillReceiveProps(this.props);
@@ -114,7 +124,7 @@ class RangeSlider extends Component {
         const value = valueFormat(nextProps.value || this.props.value, max, min);
 
         this.setState({min, max, header, tailer, value}, () => {
-          // Calculate the bound size again, if the bound size less than 0
+            // Calculate the bound size again, if the bound size less than 0
             if (this.state.upperBound <= 0) {
                 this.handleResize();
             }
@@ -279,7 +289,7 @@ class RangeSlider extends Component {
 
         if (this.props.cursor) {
             cursors = offsets.map((offset, i) => {
-                const item = cursor(assign({}, opts, {
+                const props = assign({}, opts, {
                     offset,
                     position: i + 1,
                     ref: `cursor_${(i + 1)}`,
@@ -287,14 +297,14 @@ class RangeSlider extends Component {
                     className: `${className} ${className}_${(i + 1)}`,
                     value: this.state.value[i] ? this.state.value[i].value : null,
                     onDragStart: this.handleDragStart.bind(null, i + 1),
-                }));
+                });
 
-                return item;
+                return (<Cursor {...props} />);
             });
         }
 
         if (this.state.header) {
-            cursors.splice(0, 0, cursor(assign({}, opts, {
+            const props = assign({}, opts, {
                 offset: this.calcOffset(this.state.min),
                 position: 0,
                 ref: 'header',
@@ -302,12 +312,14 @@ class RangeSlider extends Component {
                 className: `${className} ${className}_header`,
                 value: this.state.min,
                 onDragStart: this.handleDragStart.bind(null, 0),
-            })));
+            });
+
+            cursors.splice(0, 0, (<Cursor {...props} />));
         }
 
         if (this.state.tailer) {
             const position = cursors.length;
-            cursors.push(cursor(assign({}, opts, {
+            const props = assign({}, opts, {
                 offset: this.calcOffset(this.state.max),
                 position,
                 ref: 'tailer',
@@ -315,7 +327,9 @@ class RangeSlider extends Component {
                 className: `${className} ${className}_tailer`,
                 value: this.state.max,
                 onDragStart: this.handleDragStart.bind(null, l + 1),
-            })));
+            });
+
+            cursors.push((<Cursor {...props} />));
         }
 
         return cursors;

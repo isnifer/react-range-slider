@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import RangeSlider from '../';
+/* eslint-disable */
+var React = require('react');
+var ReactDOM = require('react-dom');
+var RangeSlider = require('../lib');
 
 window.React = React;
 
-class App extends Component {
-    construtctor(props) {
-        super(props);
-
-        this.state = {};
-    }
+var App = React.createClass({
+    getInitialState() {
+        return {};
+    },
 
     afterChange() {
         console.log('after change called');
-    }
+    },
 
     beforeChange() {
         console.log('before change called');
-    }
+    },
 
     render() {
         return (
@@ -30,7 +29,7 @@ class App extends Component {
                     <RangeSlider
                         onBeforeChange={this.beforeChange}
                         onAfterChange={this.afterChange}
-                        value={['#42c6da','#3cb9ec','#42a5f5','#4a80df','#5c6bc0']}
+                        value={['#42c6da', '#3cb9ec', '#42a5f5', '#4a80df', '#5c6bc0']}
                         range={[true]}
                         withBars
                         cursor
@@ -38,8 +37,8 @@ class App extends Component {
                 </div>
             </div>
         );
-    }
-}
+    },
+});
 
-render(<App />, document.getElementById('react-range-example'));
+ReactDOM.render(<App />, document.getElementById('react-range-example'));
 
