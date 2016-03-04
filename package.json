@@ -34,8 +34,14 @@
   "author": "Anton Kuznetsov <isnifer@gmail.com> (https://github.com/isnifer)",
   "license": "MIT",
   "devDependencies": {
+    "babel-loader": "^6.2.4",
+    "babel-plugin-react-transform": "^2.0.0",
     "codemirror": "^4.6.0",
+    "css-loader": "^0.23.1",
     "eggshell": "^0.1.20",
+    "eslint": "^2.2.0",
+    "eslint-config-airbnb": "^6.0.2",
+    "eslint-plugin-react": "^4.1.0",
     "gulp": "^3.8.8",
     "gulp-browserify": "^0.5.0",
     "gulp-connect": "^2.2.0",
@@ -45,10 +51,16 @@
     "gulp-sass": "^2.1.0",
     "gulp-size": "^1.1.0",
     "jest-cli": "^0.4.0",
+    "less-loader": "^2.2.2",
     "object-assign": "^3.0.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
-    "reactify": "^1.1.1"
+    "react-transform-catch-errors": "^1.0.2",
+    "react-transform-hmr": "^1.0.2",
+    "reactify": "^1.1.1",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "object-assign": ">=2.0.0"

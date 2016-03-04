@@ -1,44 +1,45 @@
-var React = window.React = require('react');
-var ReactDOM = require('react-dom');
-var RangeSlider = require('../');
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import RangeSlider from '../';
 
-var App = React.createClass({
+window.React = React;
 
-  displayName: 'React-Range-Slider-Demo',
+class App extends Component {
+    construtctor(props) {
+        super(props);
 
-  getInitialState: function() {
-    return {}
-  },
+        this.state = {};
+    }
 
-  afterChange: function () {
-    console.log('after change called');
-  },
+    afterChange() {
+        console.log('after change called');
+    }
 
-  beforeChange: function () {
-    console.log('before change called');
-  },
+    beforeChange() {
+        console.log('before change called');
+    }
 
-  render: function() {
-    return (
-      <div>
-        <div className='header'>
-          <h1>React Range Slider</h1>
-          <h4>A flexible Slider for reactjs</h4>
-        </div>
-        <div id='main'>
-          <RangeSlider
-            onBeforeChange={this.beforeChange}
-            onAfterChange={this.afterChange}
-            value={['#42c6da','#3cb9ec','#42a5f5','#4a80df','#5c6bc0']}
-            range={[true]}
-            withBars
-            cursor
-          />
-        </div>
-      </div>
-    )
-  }
-})
+    render() {
+        return (
+            <div>
+                <div className="header">
+                    <h1>React Range Slider</h1>
+                    <h4>A flexible Slider for reactjs</h4>
+                </div>
+                <div id="main">
+                    <RangeSlider
+                        onBeforeChange={this.beforeChange}
+                        onAfterChange={this.afterChange}
+                        value={['#42c6da','#3cb9ec','#42a5f5','#4a80df','#5c6bc0']}
+                        range={[true]}
+                        withBars
+                        cursor
+                    />
+                </div>
+            </div>
+        );
+    }
+}
 
-ReactDOM.render(<App />, document.getElementById('react-range-example'))
+render(<App />, document.getElementById('react-range-example'));
 

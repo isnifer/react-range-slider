@@ -1,0 +1,42 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "globals": {
+        "_": false,
+        "$": false,
+        "moment": false,
+        "google": false,
+        "describe": false,
+        "it": false,
+        "after": false,
+        "before": false
+    },
+    "rules": {
+        "func-names": 0,
+        "indent": [2, 4, {"SwitchCase": 1}],
+        "object-curly-spacing": 0,
+        "max-len": [2, 120, 4],
+        "consistent-return": 0,
+        "new-cap": [2, {
+            "capIsNewExceptions": ["SelectDecorator", "AppSkeleton"]
+        }],
+        "react/jsx-indent-props": [2, 4],
+        "react/jsx-closing-bracket-location": [1, {
+            "nonEmpty": "after-props",
+            "selfClosing": "tag-aligned"
+        }],
+        "react/prop-types": 0,
+        "react/no-multi-comp": 0
+    },
+    "ecmaFeatures": {
+        "experimentalObjectRestSpread": true
+    },
+    "plugins": [
+      "react"
+    ]
+}
