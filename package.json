@@ -5,16 +5,16 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "build": "babel ./src/index.js -o ./lib/index.js",
+    "build": "babel src --out-dir lib",
     "watch": "./node_modules/.bin/gulp watch --gulpfile example/gulpfile.js",
     "deploy": "./node_modules/.bin/gulp deploy --gulpfile example/gulpfile.js"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:isnifer/react-range-slider.git"
+    "url": "git@github.com:isnifer/react-range-slider-bem.git"
   },
-  "bugs": "https://github.com/isnifer/react-range-slider/issues",
-  "homepage": "https://github.com/isnifer/react-range-slider",
+  "bugs": "https://github.com/isnifer/react-range-slider-bem/issues",
+  "homepage": "https://github.com/isnifer/react-range-slider-bem",
   "keywords": [
     "react",
     "react-component",
