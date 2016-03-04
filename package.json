@@ -1,7 +1,7 @@
 {
-  "name": "react-range-slider",
+  "name": "react-range-slider-bem",
   "version": "0.2.0",
-  "description": "A flexible slider for reactjs.",
+  "description": "Fork of 'react-range-slider' with BEM naming",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:xeodou/react-range-slider.git"
+    "url": "git@github.com:isnifer/react-range-slider.git"
   },
-  "bugs": "https://github.com/xeodou/react-range-slider/issues",
-  "homepage": "https://github.com/xeodou/react-range-slider",
+  "bugs": "https://github.com/isnifer/react-range-slider/issues",
+  "homepage": "https://github.com/isnifer/react-range-slider",
   "keywords": [
     "react",
     "react-component",
@@ -31,7 +31,7 @@
   "peerDependencies": {
     "react": ">=0.14.x"
   },
-  "author": "xeodou@gmail.com",
+  "author": "Anton Kuznetsov <isnifer@gmail.com> (https://github.com/isnifer)",
   "license": "MIT",
   "devDependencies": {
     "codemirror": "^4.6.0",
