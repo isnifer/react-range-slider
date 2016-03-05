@@ -65,7 +65,7 @@ gulp.task('watch', ['connect'], function() {
   // Wathch .scss files
   gulp.watch('style.scss', ['sass']);
   // Watch .jsx files
-  gulp.watch(['app.js', '../lib/index.js'], ['browserify']);
+  gulp.watch(['app.js', '../lib/**.js'], ['browserify']);
 
 })
 

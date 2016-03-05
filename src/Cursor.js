@@ -4,7 +4,15 @@ import assign from 'object-assign';
 const noop = function () {};
 
 class Cursor extends Component {
-    getStyle() {
+    constructor(props) {
+        super(props);
+
+        this.getStyle = this.getStyle.bind(this);
+        this.getProps = this.getProps.bind(this);
+        this.getZIndex = this.getZIndex.bind(this);
+    }
+
+    getStyle(zIndex) {
         const transform = `translate${this.props.axis}(${this.props.offset}px)`;
         return {
             WebkitTransform: transform,
@@ -13,28 +21,48 @@ class Cursor extends Component {
             OTransform: transform,
             transform,
             position: 'absolute',
+            zIndex,
         };
     }
 
     getProps() {
         const props = assign({}, this.props);
-        const i = this.props.position;
-        const l = this.props.size;
-        props.style = this.getStyle();
+        const zIndex = this.getZIndex();
+        props.style = this.getStyle(zIndex);
         props.onMouseDown = this.props.onDragStart;
         props.onTouchStart = (e, ...rest) => {
             e.preventDefault(); // prevent for scroll
             return this.props.onDragStart.apply(null, [e, ...rest]);
         };
-        props.onMouseUp = this.props.onDragEnd;
-        props.onTouchEnd = this.props.onDragEnd;
-        props.zIndex = (i === 0 || i === l + 1) ? 0 : i + 1;
+        props.onMouseUp = props.onTouchEnd = this.props.onDragEnd;
         return props;
     }
 
+    getZIndex() {
+        const {position, min, max, value, size} = this.props;
+
+        // If first everywhere but not max  || If last at max value
+        if (position === 0 && value !== max || (position === size || position === size + 1) && value === max) {
+            return 0;
+        }
+
+        // If first at max value            || If last at min value
+        if (position === 0 && value === max || (position === size || position === size + 1) && value === min) {
+            return size + 1;
+        }
+
+        // Between first and last at max value
+        if (position !== 0 && position !== size && position !== size + 1 && value === max) {
+            return size - position;
+        }
+
+        return position + 1;
+    }
+
     render() {
+        const props = this.getProps();
         return (
-            <div {...this.getProps()}>
+            <div {...props}>
                 <span>
                     <span>{this.props.value}</span>
                 </span>
@@ -49,6 +77,8 @@ Cursor.propTypes = {
     onDragStart: PropTypes.func,
     onDragEnd: PropTypes.func,
     value: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
 };
 
 Cursor.defaultProps = {

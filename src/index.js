@@ -219,7 +219,7 @@ class RangeSlider extends Component {
             min = parseInt(min, 10);
 
             this.setState({min});
-        } else if (i > 0 && i < l) {
+        } else if (i > 0 && i <= l) {
             // Move cursor
             // The cursor postion must smaller than the next cursor or this.state.max
             // bigger than the previous cursor or this.state.min
@@ -296,6 +296,8 @@ class RangeSlider extends Component {
                     key: `cursor_${(i + 1)}`,
                     className: `${className} ${className}_${(i + 1)}`,
                     value: this.state.value[i] ? this.state.value[i].value : null,
+                    min: parseInt(this.props.min, 10),
+                    max: parseInt(this.props.max, 10),
                     onDragStart: this.handleDragStart.bind(null, i + 1),
                 });
 
@@ -311,6 +313,8 @@ class RangeSlider extends Component {
                 key: 'header',
                 className: `${className} ${className}_header`,
                 value: this.state.min,
+                min: parseInt(this.props.min, 10),
+                max: parseInt(this.props.max, 10),
                 onDragStart: this.handleDragStart.bind(null, 0),
             });
 
@@ -326,6 +330,8 @@ class RangeSlider extends Component {
                 key: 'tailer',
                 className: `${className} ${className}_tailer`,
                 value: this.state.max,
+                min: parseInt(this.props.min, 10),
+                max: parseInt(this.props.max, 10),
                 onDragStart: this.handleDragStart.bind(null, l + 1),
             });
 
