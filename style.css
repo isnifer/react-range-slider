@@ -1397,24 +1397,24 @@ body {
   width: 90%;
   height: 40px;
   margin: 0 auto; }
-  .range-slider .cursor {
+  .range-slider__cursor {
     width: 4px;
     height: inherit;
     padding: 8px;
     background-color: #FFA52F; }
-    .range-slider .cursor.header {
+    .range-slider__cursor_header {
       height: inherit; }
-    .range-slider .cursor span {
+    .range-slider__cursor span {
       position: absolute;
       bottom: 0px;
       right: 0px;
       background-color: #B5B5B5; }
-  .range-slider .bars {
+  .range-slider__bars {
     height: 24px;
     background-color: #BDBDBD;
     position: absolute;
     width: 100%;
     top: 15px; }
-    .range-slider .bars .bar {
-      height: inherit;
-      background-color: #7C7C7C; }
+  .range-slider__bar {
+    height: inherit;
+    background-color: #7C7C7C; }

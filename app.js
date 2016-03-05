@@ -1,207 +1,323 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/* eslint-disable */
 var React = require('react');
-var assign = require('object-assign');
-var PropTypes = React.PropTypes;
+var ReactDOM = require('react-dom');
+var RangeSlider = require('../lib');
 
-var noop = function () {}
+window.React = React;
 
-var Cursor = React.createClass({
+var App = React.createClass({displayName: "App",
+    getInitialState() {
+        return {};
+    },
 
-  displayName: 'RangeSliderCursor',
+    afterChange() {
+        console.log('after change called');
+    },
 
-  propTypes: {
-    axis: PropTypes.oneOf(['X', 'Y']),
-    offset: PropTypes.number,
-    onDragStart: PropTypes.func,
-    onDragEnd: PropTypes.func,
-    value: PropTypes.number
-  },
+    beforeChange() {
+        console.log('before change called');
+    },
 
-  getDefaultProps: function () {
-    return {
-      axis: 'X',
-      offset: 0,
-      size: 0,
-      position: 0,
-      onDragStart: noop,
-      onDragEnd: noop
-    };
-  },
-
-  getStyle: function () {
-    var transform = 'translate' + this.props.axis + '(' + this.props.offset + 'px)';
-    return {
-      WebkitTransform: transform,
-      MozTransform: transform,
-      msTransform: transform,
-      OTransform: transform,
-      transform: transform,
-      position: 'absolute'
-    }
-  },
-
-  getProps: function () {
-    var props = assign({}, this.props);
-    var i = this.props.position;
-    var l = this.props.size;
-    props.style = this.getStyle();
-    props.onMouseDown = this.props.onDragStart;
-    props.onTouchStart = function (e) {
-      e.preventDefault(); // prevent for scroll
-      return this.props.onDragStart.apply(null, arguments);
-    }.bind(this);
-    props.onMouseUp = this.props.onDragEnd;
-    props.onTouchEnd = this.props.onDragEnd;
-    props.zIndex = (i === 0 || i === l + 1) ? 0 : i + 1;
-    return props;
-  },
-
-  render: function () {
-    return (
-      React.createElement('div', this.getProps(),
-        React.createElement('span', null,
-          React.createElement('span', null,
-            this.props.value)
-        )
-      )
-    );
-  }
-
+    render() {
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", {className: "header"}, 
+                    React.createElement("h1", null, "React Range Slider BEM"), 
+                    React.createElement("h4", null, "A flexible Slider for reactjs")
+                ), 
+                React.createElement("div", {id: "main"}, 
+                    React.createElement(RangeSlider, {
+                        onBeforeChange: this.beforeChange, 
+                        onAfterChange: this.afterChange, 
+                        value: ['#42c6da', '#3cb9ec', '#42a5f5', '#4a80df', '#5c6bc0'], 
+                        range: [true], 
+                        withBars: true, 
+                        cursor: true}
+                    )
+                )
+            )
+        );
+    },
 });
+
+ReactDOM.render(React.createElement(App, null), document.getElementById('react-range-example'));
+
+
+
+},{"../lib":4,"react":163,"react-dom":34}],2:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _objectAssign = require('object-assign');
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var noop = function noop() {};
+
+var Cursor = function (_Component) {
+    _inherits(Cursor, _Component);
+
+    function Cursor(props) {
+        _classCallCheck(this, Cursor);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cursor).call(this, props));
+
+        _this.getStyle = _this.getStyle.bind(_this);
+        _this.getProps = _this.getProps.bind(_this);
+        _this.getZIndex = _this.getZIndex.bind(_this);
+        return _this;
+    }
+
+    _createClass(Cursor, [{
+        key: 'getStyle',
+        value: function getStyle(zIndex) {
+            var transform = 'translate' + this.props.axis + '(' + this.props.offset + 'px)';
+            return {
+                WebkitTransform: transform,
+                MozTransform: transform,
+                msTransform: transform,
+                OTransform: transform,
+                transform: transform,
+                position: 'absolute',
+                zIndex: zIndex
+            };
+        }
+    }, {
+        key: 'getProps',
+        value: function getProps() {
+            var _this2 = this;
+
+            var props = (0, _objectAssign2.default)({}, this.props);
+            var zIndex = this.getZIndex();
+            props.style = this.getStyle(zIndex);
+            props.onMouseDown = this.props.onDragStart;
+            props.onTouchStart = function (e) {
+                for (var _len = arguments.length, rest = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                    rest[_key - 1] = arguments[_key];
+                }
+
+                e.preventDefault(); // prevent for scroll
+                return _this2.props.onDragStart.apply(null, [e].concat(rest));
+            };
+            props.onMouseUp = props.onTouchEnd = this.props.onDragEnd;
+            return props;
+        }
+    }, {
+        key: 'getZIndex',
+        value: function getZIndex() {
+            var _props = this.props;
+            var position = _props.position;
+            var min = _props.min;
+            var max = _props.max;
+            var value = _props.value;
+            var size = _props.size;
+
+            // If first everywhere but not max  || If last at max value
+
+            if (position === 0 && value !== max || (position === size || position === size + 1) && value === max) {
+                return 0;
+            }
+
+            // If first at max value            || If last at min value
+            if (position === 0 && value === max || (position === size || position === size + 1) && value === min) {
+                return size + 1;
+            }
+
+            // Between first and last at max value
+            if (position !== 0 && position !== size && position !== size + 1 && value === max) {
+                return size - position;
+            }
+
+            return position + 1;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var props = this.getProps();
+            return _react2.default.createElement(
+                'div',
+                props,
+                _react2.default.createElement(
+                    'span',
+                    null,
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        this.props.value
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Cursor;
+}(_react.Component);
+
+Cursor.propTypes = {
+    axis: _react.PropTypes.oneOf(['X', 'Y']),
+    offset: _react.PropTypes.number,
+    onDragStart: _react.PropTypes.func,
+    onDragEnd: _react.PropTypes.func,
+    value: _react.PropTypes.number,
+    min: _react.PropTypes.number,
+    max: _react.PropTypes.number
+};
+
+Cursor.defaultProps = {
+    axis: 'X',
+    offset: 0,
+    size: 0,
+    position: 0,
+    onDragStart: noop,
+    onDragEnd: noop
+};
 
 module.exports = Cursor;
 
+},{"object-assign":32,"react":163}],3:[function(require,module,exports){
+'use strict';
 
-},{"object-assign":32,"react":163}],2:[function(require,module,exports){
 // @credits: https://github.com/mzabriskie/react-draggable/blob/master/lib/draggable.js#L51-L120
 
 var event = {};
 
-// @credits: http://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript/4819886#4819886
 /* Conditional to fix node server side rendering of component */
-event.isTouchDevice = function () {
-  var isTouchDevice = false;
-  // Check if is Browser
-  if (typeof window !== 'undefined') {
-    isTouchDevice = 'ontouchstart' in window // works on most browsers
-      || 'onmsgesturechange' in window; // works on ie10 on ms surface
-  }
-  return isTouchDevice;
-}
+var isTouchDevice = function isTouchDevice() {
+    var flag = false;
+
+    // Check if is Browser
+    if (typeof window !== 'undefined') {
+        flag = 'ontouchstart' in window // works on most browsers
+         || 'onmsgesturechange' in window; // works on ie10 on ms surface
+    }
+
+    return flag;
+};
+
+event.isTouchDevice = isTouchDevice;
 
 /**
  * simple abstraction for dragging events names
  * */
-event.dragEventFor = (function () {
-  var eventsFor = {
-    touch: {
-      start: 'touchstart',
-      move: 'touchmove',
-      end: 'touchend'
-    },
-    mouse: {
-      start: 'mousedown',
-      move: 'mousemove',
-      end: 'mouseup'
+event.dragEventFor = function () {
+    var eventsFor = {
+        touch: {
+            start: 'touchstart',
+            move: 'touchmove',
+            end: 'touchend'
+        },
+        mouse: {
+            start: 'mousedown',
+            move: 'mousemove',
+            end: 'mouseup'
+        }
+    };
+
+    return eventsFor[isTouchDevice() ? 'touch' : 'mouse'];
+}();
+
+event.addEvent = function (el, evt, handler) {
+    if (!el) {
+        return;
     }
-  };
-  return eventsFor[event.isTouchDevice() ? 'touch' : 'mouse'];
-})()
 
-event.addEvent = function (el, event, handler) {
-  if (!el) {
-    return;
-  }
-  if (el.attachEvent) {
-    el.attachEvent('on' + event, handler);
-  } else if (el.addEventListener) {
-    el.addEventListener(event, handler, true);
-  } else {
-    el['on' + event] = handler;
-  }
-}
+    if (el.attachEvent) {
+        el.attachEvent('on' + evt, handler);
+    } else if (el.addEventListener) {
+        el.addEventListener(evt, handler, true);
+    } else {
+        /* eslint-disable no-param-reassign */
+        el['on' + evt] = handler;
+    }
+};
 
-event.removeEvent = function (el, event, handler) {
-  if (!el) {
-    return;
-  }
-  if (el.detachEvent) {
-    el.detachEvent('on' + event, handler);
-  } else if (el.removeEventListener) {
-    el.removeEventListener(event, handler, true);
-  } else {
-    el['on' + event] = null;
-  }
-}
+event.removeEvent = function (el, evt, handler) {
+    if (!el) {
+        return;
+    }
+
+    if (el.detachEvent) {
+        el.detachEvent('on' + evt, handler);
+    } else if (el.removeEventListener) {
+        el.removeEventListener(evt, handler, true);
+    } else {
+        /* eslint-disable no-param-reassign */
+        el['on' + evt] = null;
+    }
+};
 
 module.exports = event;
 
+},{}],4:[function(require,module,exports){
+'use strict';
 
-},{}],3:[function(require,module,exports){
-var React = window.React = require('react');
-var ReactDOM = require('react-dom');
-var RangeSlider = require('../');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var App = React.createClass({
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /*
+                                                                                                                                                                                                                                                   * react-range-slider-bem - index.js
+                                                                                                                                                                                                                                                   * Copyright(c) 2015 xeodou <xeodou@gmail.com>
+                                                                                                                                                                                                                                                   * Copyright(c) 2016 isnifer <isnifer@gmail.com>
+                                                                                                                                                                                                                                                   * MIT Licensed
+                                                                                                                                                                                                                                                   */
 
-  displayName: 'React-Range-Slider-Demo',
+var _react = require('react');
 
-  getInitialState: function() {
-    return {}
-  },
+var _react2 = _interopRequireDefault(_react);
 
-  afterChange: function () {
-    console.log('after change called');
-  },
+var _objectAssign = require('object-assign');
 
-  beforeChange: function () {
-    console.log('before change called');
-  },
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement("div", {className: "header"}, 
-          React.createElement("h1", null, "React Range Slider"), 
-          React.createElement("h4", null, "A flexible Slider for reactjs")
-        ), 
-        React.createElement("div", {id: "main"}, 
-          React.createElement(RangeSlider, {onBeforeChange: this.beforeChange, onAfterChange: this.afterChange, value: [ '#42c6da','#3cb9ec','#42a5f5','#4a80df','#5c6bc0'], withBars: true, cursor: true, range: [true]})
-        )
-      )
-    )
-  }
-})
+var _event = require('./event');
 
-ReactDOM.render(React.createElement(App, null), document.getElementById('react-range-example'))
+var _Cursor = require('./Cursor');
 
+var _Cursor2 = _interopRequireDefault(_Cursor);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"../":4,"react":163,"react-dom":34}],4:[function(require,module,exports){
-/*
- * react-range-slider - index.js
- * Copyright(c) 2015 xeodou <xeodou@gmail.com>
- * MIT Licensed
- */
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var React = require('react');
-var PropTypes = React.PropTypes;
-var assign = require('object-assign');
-var event = require('./event');
-var Cursor = React.createFactory(require('./Cursor'));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var noop = function () {}
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var noop = function noop() {};
 
 /**
  * To prevent text selection while dragging.
  * @credits: http://stackoverflow.com/questions/5429827/how-can-i-prevent-text-element-selection-with-cursor-drag
  */
 function pauseEvent(e) {
-  if (e.stopPropagation) e.stopPropagation();
-  if (e.preventDefault) e.preventDefault();
-  e.cancelBubble = true;
-  e.returnValue = false;
-  return false;
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+
+    /* eslint-disable no-param-reassign */
+    e.cancelBubble = true;
+    e.returnValue = false;
+
+    return false;
 }
 
 /**
@@ -209,17 +325,21 @@ function pauseEvent(e) {
  * To [{value:1, color: null}] or [{value: '20%', color: '#FFF'}]
  */
 function valueFormat(value, max, min) {
-  value = typeof value === 'number' ? [value] : value;
-  return value.map(function (v, i) {
-    return typeof v === 'object' ? v : {
-      value: typeof v === 'number' ? v : (parseInt((i + 1) * (max - min) / value.length, 10) + min),
-      color: typeof v === 'string' ? v : ''
-    };
-  });
-  // TO Do: Sort ?
-  // .sort(function(a, b) {
-  //   return parseInt(a.value) - parseInt(b.value);
-  // })
+    var currentValue = typeof value === 'number' ? [value] : value;
+    return currentValue.map(function (v, i) {
+        if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object') {
+            return v;
+        }
+
+        return {
+            value: typeof v === 'number' ? v : parseInt((i + 1) * (max - min) / value.length, 10) + min,
+            color: typeof v === 'string' ? v : ''
+        };
+    });
+    // TO Do: Sort ?
+    // .sort(function(a, b) {
+    //   return parseInt(a.value) - parseInt(b.value);
+    // })
 }
 
 /**
@@ -227,62 +347,419 @@ function valueFormat(value, max, min) {
  * @credits: http://stackoverflow.com/questions/8864430/compare-javascript-array-of-objects-to-get-min-max
  */
 function finder(cmp, arr, attr) {
-  var val = arr[0] ? arr[0][attr] || 0 : 0;
-  for (var i = 1; i < arr.length; i++) {
-    val = cmp(val, arr[i][attr])
-  }
-  return val;
+    var val = arr[0] ? arr[0][attr] || 0 : 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        val = cmp(val, arr[i][attr]);
+    }
+
+    return val;
 }
 
-var RangeSlider = React.createClass({
+var RangeSlider = function (_Component) {
+    _inherits(RangeSlider, _Component);
 
-  displayName: 'RangeSlider',
+    function RangeSlider(props) {
+        _classCallCheck(this, RangeSlider);
 
-  propTypes: {
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RangeSlider).call(this, props));
+
+        _this.state = {
+            index: -1, // TODO: find better solution
+            clicked: -1,
+            upperBound: 0,
+            axis: _this.isHorizontal() ? 'X' : 'Y',
+            minProp: _this.isHorizontal() ? 'left' : 'top',
+            maxProp: _this.isHorizontal() ? 'right' : 'bottom',
+            value: []
+        };
+
+        _this.isTouchDevice = _event.isTouchDevice.bind(_this);
+        _this.dragEventFor = _event.dragEventFor;
+        _this.addEvent = _event.addEvent.bind(_this);
+        _this.removeEvent = _event.removeEvent.bind(_this);
+
+        _this.getValue = _this.getValue.bind(_this);
+        _this.handleResize = _this.handleResize.bind(_this);
+        _this.handleDragStart = _this.handleDragStart.bind(_this);
+        _this.handleDrag = _this.handleDrag.bind(_this);
+        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+        _this.handleBarClick = _this.handleBarClick.bind(_this);
+        _this.isHorizontal = _this.isHorizontal.bind(_this);
+        _this.calcOffset = _this.calcOffset.bind(_this);
+        return _this;
+    }
+
+    _createClass(RangeSlider, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.componentWillReceiveProps(this.props);
+            this.addEvent(window, 'resize', this.handleResize);
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.handleResize();
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var _this2 = this;
+
+            var range = nextProps.range || this.props.range;
+
+            if (range) {
+                range = typeof range === 'boolean' ? [range, range] : range;
+            } else {
+                range = [];
+            }
+
+            var header = range[0];
+            var tailer = range[1];
+            var min = nextProps.min || this.props.min;
+            var max = nextProps.max || this.props.max;
+            min = typeof header === 'number' ? Math.max(header, min) : min;
+            max = typeof tailer === 'number' ? Math.min(Math.max(tailer, min), max) : max;
+            var value = valueFormat(nextProps.value || this.props.value, max, min);
+
+            this.setState({ min: min, max: max, header: header, tailer: tailer, value: value }, function () {
+                // Calculate the bound size again, if the bound size less than 0
+                if (_this2.state.upperBound <= 0) {
+                    _this2.handleResize();
+                }
+            });
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this.removeEvent(window, 'resize', this.handleResize);
+        }
+    }, {
+        key: 'getValue',
+        value: function getValue() {
+            return this.state.value;
+        }
+    }, {
+        key: 'handleResize',
+        value: function handleResize() {
+            var slider = this.refs.slider;
+            var handle = this.refs.header ? this.refs.header : {};
+            // const rect = slider.getBoundingClientRect();
+
+            var size = this.isHorizontal() ? 'clientWidth' : 'clientHeight';
+
+            // const sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
+            // const sliderMin = rect[this.props.minProp];
+
+            this.setState({
+                upperBound: slider[size] - (handle[size] || 0)
+            });
+        }
+    }, {
+        key: 'handleDragStart',
+        value: function handleDragStart(i, e) {
+            if (this.props.disabled) {
+                return;
+            }
+
+            // Make it possible to attach event handlers on top of this one
+            this.props.onMouseDown(e);
+            var currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
+            var position = currentEvent['page' + this.state.axis];
+            var value = this.state.min;
+            var l = this.state.value.length;
+
+            if (l !== 0 && i > 0 && i <= l) {
+                value = this.state.value[i - 1].value;
+            } else if (i === l + 1) {
+                value = this.state.max;
+            }
+
+            this.setState({
+                startValue: value,
+                startPosition: position,
+                index: i,
+                clicked: -1
+            });
+
+            this.props.onBeforeChange(currentEvent, i - 1);
+
+            // Add currentEvent handlers
+            this.addEvent(window, this.dragEventFor.move, this.handleDrag);
+            this.addEvent(window, this.dragEventFor.end, this.handleDragEnd);
+            pauseEvent(currentEvent);
+        }
+    }, {
+        key: 'handleDrag',
+        value: function handleDrag(e) {
+            if (this.props.disabled) {
+                return;
+            }
+
+            var currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
+            var position = currentEvent['page' + this.state.axis];
+            var diffPosition = position - this.state.startPosition;
+            var diffValue = diffPosition / this.state.upperBound * (this.props.max - this.props.min);
+            var i = this.state.index;
+            var l = this.state.value.length;
+
+            // Cursor position after moved
+            var nextCursorPosition = this.state.startValue + diffValue;
+
+            if (i === 0) {
+                // Move header
+                if (this.props.disabledHeader) {
+                    return;
+                }
+
+                var v = l > 0 ? finder(Math.min, this.state.value, 'value') : this.state.max;
+                var min = undefined;
+
+                if (nextCursorPosition <= v) {
+                    min = Math.max(nextCursorPosition < 0 ? 0 : nextCursorPosition);
+                } else {
+                    min = Math.max(v, this.props.min);
+                }
+                min = parseInt(min, 10);
+
+                this.setState({ min: min });
+            } else if (i > 0 && i <= l) {
+                // Move cursor
+                // The cursor postion must smaller than the next cursor or this.state.max
+                // bigger than the previous cursor or this.state.min
+                var value = this.state.value;
+
+                // var v = value[i - 1].value;
+
+                var min = value[i - 2] ? value[i - 2].value : this.state.min;
+                var max = value[i] ? value[i].value : this.state.max;
+                value[i - 1].value = parseInt(Math.max(Math.min(nextCursorPosition, max), min), 10);
+
+                this.setState({ value: value });
+            } else if (i === l + 1) {
+                // Move tailer
+                if (this.props.disabledTailer) return;
+                var v = l > 0 ? finder(Math.max, this.state.value, 'value') : this.state.min;
+                this.setState({
+                    max: parseInt(Math.min(nextCursorPosition >= v ? nextCursorPosition : v, this.props.max), 10)
+                });
+            }
+
+            this.props.onChange(e, i - 1, this.state.value);
+        }
+    }, {
+        key: 'handleDragEnd',
+        value: function handleDragEnd(e) {
+            this.setState({ index: -1 });
+
+            this.props.onAfterChange(e, this.state.value);
+
+            // Remove event handlers
+            this.removeEvent(window, this.dragEventFor.move, this.handleDrag);
+            this.removeEvent(window, this.dragEventFor.end, this.handleDragEnd);
+            e.stopPropagation();
+        }
+    }, {
+        key: 'handleBarClick',
+        value: function handleBarClick(e) {
+            var idx = parseInt(e.target.id.split('_')[1], 10);
+            this.setState({ clicked: idx });
+            this.props.onBarClick(e, idx, this.state.value[idx]);
+        }
+    }, {
+        key: 'isHorizontal',
+        value: function isHorizontal() {
+            return this.props.orientation !== 'vertical';
+        }
+
+        // calculates the offset of a handle in pixels based on its value.
+
+    }, {
+        key: 'calcOffset',
+        value: function calcOffset(v) {
+            if (typeof v === 'undefined') {
+                return;
+            }
+
+            var value = typeof v === 'number' ? v : v.value;
+            var ratio = (value - this.props.min) / (this.props.max - this.props.min);
+
+            return ratio * this.state.upperBound;
+        }
+    }, {
+        key: 'renderCursors',
+        value: function renderCursors(offsets) {
+            var _this3 = this;
+
+            var cursors = [];
+            var l = this.state.value.length;
+            var opts = {
+                axis: this.state.axis,
+                size: l,
+                onDragEnd: this.handleDragEnd
+            };
+
+            var className = this.props.className + '__cursor';
+
+            if (this.props.cursor) {
+                cursors = offsets.map(function (offset, i) {
+                    var props = (0, _objectAssign2.default)({}, opts, {
+                        offset: offset,
+                        position: i + 1,
+                        ref: 'cursor_' + (i + 1),
+                        key: 'cursor_' + (i + 1),
+                        className: className + ' ' + className + '_' + (i + 1),
+                        value: _this3.state.value[i] ? _this3.state.value[i].value : null,
+                        min: parseInt(_this3.props.min, 10),
+                        max: parseInt(_this3.props.max, 10),
+                        onDragStart: _this3.handleDragStart.bind(null, i + 1)
+                    });
+
+                    return _react2.default.createElement(_Cursor2.default, props);
+                });
+            }
+
+            if (this.state.header) {
+                var props = (0, _objectAssign2.default)({}, opts, {
+                    offset: this.calcOffset(this.state.min),
+                    position: 0,
+                    ref: 'header',
+                    key: 'header',
+                    className: className + ' ' + className + '_header',
+                    value: this.state.min,
+                    min: parseInt(this.props.min, 10),
+                    max: parseInt(this.props.max, 10),
+                    onDragStart: this.handleDragStart.bind(null, 0)
+                });
+
+                cursors.splice(0, 0, _react2.default.createElement(_Cursor2.default, props));
+            }
+
+            if (this.state.tailer) {
+                var position = cursors.length;
+                var props = (0, _objectAssign2.default)({}, opts, {
+                    offset: this.calcOffset(this.state.max),
+                    position: position,
+                    ref: 'tailer',
+                    key: 'tailer',
+                    className: className + ' ' + className + '_tailer',
+                    value: this.state.max,
+                    min: parseInt(this.props.min, 10),
+                    max: parseInt(this.props.max, 10),
+                    onDragStart: this.handleDragStart.bind(null, l + 1)
+                });
+
+                cursors.push(_react2.default.createElement(_Cursor2.default, props));
+            }
+
+            return cursors;
+        }
+    }, {
+        key: 'renderBar',
+        value: function renderBar(from, to, i) {
+            var _style;
+
+            var style = (_style = {
+                position: 'absolute',
+                backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : null
+            }, _defineProperty(_style, this.state.minProp, from), _defineProperty(_style, this.state.maxProp, this.state.upperBound - to), _style);
+
+            var className = this.props.className + '__bar';
+            var modClassName = className + ' ' + className + '_';
+            var barClassName = modClassName + i + (this.state.clicked === i ? ' ' + className + '_active' : '');
+
+            // TODO: Update click handler
+            return _react2.default.createElement('div', {
+                key: 'bar_' + i,
+                ref: 'bar_' + i,
+                id: 'bar_' + i,
+                className: barClassName,
+                style: style,
+                onClick: this.handleBarClick });
+        }
+    }, {
+        key: 'renderBars',
+        value: function renderBars(offsets) {
+            var _this4 = this;
+
+            var minOffset = this.calcOffset(this.state.min);
+            var bars = offsets.map(function (offset, i) {
+                return _this4.renderBar(offsets[i - 1] || minOffset, offset, i);
+            });
+
+            if (!bars.length) {
+                bars.push(this.renderBar(minOffset, this.calcOffset(this.state.max), 0));
+            }
+
+            return bars;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var offsets = this.state.value.map(this.calcOffset, this);
+            var bars = this.props.withBars ? this.renderBars(offsets) : null;
+            var cursors = this.renderCursors(offsets);
+            var _props = this.props;
+            var className = _props.className;
+            var modClassName = _props.modClassName;
+
+            var mod = modClassName ? ' ' + className + '_' + modClassName : '';
+            var rangeClassName = className + ' ' + className + '\'_\'' + this.props.orientation + mod;
+
+            return _react2.default.createElement(
+                'div',
+                { className: rangeClassName, ref: 'slider', style: { position: 'relative' } },
+                _react2.default.createElement(
+                    'div',
+                    { className: className + '__bars' },
+                    bars
+                ),
+                cursors
+            );
+        }
+    }]);
+
+    return RangeSlider;
+}(_react.Component);
+
+RangeSlider.propTypes = {
     /**
      * Min value for slider, default is 0.
      * Example:
      *
      * ```
-     *  <RangeSlider min=0/>
+     *  <RangeSlider min=0 />
      *
      * ```
      */
-    min: PropTypes.number,
+    min: _react.PropTypes.number,
     /**
      * Max value for slider, default is 100.
      * Example:
      *
      * ```
-     *  <RangeSlider max=999/>
+     *  <RangeSlider max=999 />
      *
      * ```
      */
-    max: PropTypes.number,
+    max: _react.PropTypes.number,
     /**
      * Define the value, can be string or array
      *
      * Example:
      *
      * ```
-     *  <RangeSlider value=[10,20]/>
+     *  <RangeSlider value=[10,20] />
      *  or
      *  <RangeSlider value=[{value:10, color: '#FFF'}] />
      *  or
      *  <RangeSlider value=['#FFF', '#FFS'] />
      * ```
      */
-    value: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.number),
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.shape({
-          value: PropTypes.number,
-          color: PropTypes.string
-        }))
-      ])
-    ]),
+    value: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.number), _react.PropTypes.arrayOf(_react.PropTypes.string), _react.PropTypes.arrayOf(_react.PropTypes.shape({
+        value: _react.PropTypes.number,
+        color: _react.PropTypes.string
+    }))])]),
     /**
      * Orientation for slider, must be horizontal or vertical, default is horizontal.
      * Example:
@@ -292,25 +769,22 @@ var RangeSlider = React.createClass({
      *
      * ```
      */
-    orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+    orientation: _react.PropTypes.oneOf(['horizontal', 'vertical']),
     /**
      * Options is slider show the bars or not, default false.
      */
-    withBars: PropTypes.bool,
+    withBars: _react.PropTypes.bool,
     /**
      * Options is slider show the cursors or not, default false.
      * You can also set up a custom cursor and implement like
      * ./Cursor.js
      */
-    cursor: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.element
-    ]),
+    cursor: _react.PropTypes.oneOfType([_react.PropTypes.bool, _react.PropTypes.element]),
     /**
      * Options disable slider, default false.
      * If set diabled with true cursors in the slider will unable to drag.
      */
-    disabled: PropTypes.bool,
+    disabled: _react.PropTypes.bool,
     /**
      *
      * Range for slider, menas you can set header or tailer cursor or both, something like blow:
@@ -326,29 +800,45 @@ var RangeSlider = React.createClass({
      *
      * ```
      */
-    range: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.arrayOf(PropTypes.bool),
-      PropTypes.arrayOf(PropTypes.number)
-    ]),
+    range: _react.PropTypes.oneOfType([_react.PropTypes.bool, _react.PropTypes.arrayOf(_react.PropTypes.bool), _react.PropTypes.arrayOf(_react.PropTypes.number)]),
     /**
      * Disable slider header cursor.
      *
      * Example:
      * ```
-     *  <RangeSlider range={[10]} disabledHeader/>
+     *  <RangeSlider range={[10]} disabledHeader />
      * ```
      */
-    disabledHeader: PropTypes.bool,
+    disabledHeader: _react.PropTypes.bool,
     /**
      * Disable slider tailer cursor.
      *
      * Example:
      * ```
-     *  <RangeSlider range={[null, 90]} disabledTailer/>
+     *  <RangeSlider range={[null, 90]} disabledTailer />
      * ```
      */
-    disabledTailer: PropTypes.bool,
+    disabledTailer: _react.PropTypes.bool,
+    /**
+     * Slider classname
+     *
+     * Example:
+     * ```
+     *  <RangeSlider className="custom-slider" />
+     * ```
+     */
+    className: _react.PropTypes.string,
+    /**
+     * Slider modifier classname
+     *
+     * Example:
+     * ```
+     *  <RangeSlider className="custom-slider" modClassName="rating" />
+     * ```
+     *
+     * will transform to custom-slider_rating on element
+     */
+    modClassName: _react.PropTypes.string,
     /**
      * Hook event for when mouse down for each cursor.
      *
@@ -357,19 +847,19 @@ var RangeSlider = React.createClass({
      *  <RangeSlider onMouseDown={somefunction} />
      * ```
      */
-    onMouseDown: PropTypes.func,
+    onMouseDown: _react.PropTypes.func,
     /**
      * Hook function before cursor dragging.
      */
-    onBeforeChange: PropTypes.func,
+    onBeforeChange: _react.PropTypes.func,
     /**
      * Hook function when cursor dragging.
      */
-    onChange: PropTypes.func,
+    onChange: _react.PropTypes.func,
     /**
      * Hook function after cursor dragging.
      */
-    onAfterChange: PropTypes.func,
+    onAfterChange: _react.PropTypes.func,
     /**
      * Click event for each bar.
      *
@@ -381,300 +871,30 @@ var RangeSlider = React.createClass({
      * @param {Number} Index Index of the clicked bar.
      * @param {String} Color Clicked bar's background color.
      */
-    onBarClick: PropTypes.func
-  },
+    onBarClick: _react.PropTypes.func
+};
 
-  getDefaultProps: function () {
-    return {
-      min: 0,
-      max: 100,
-      value: [],
-      defaultValue: 0,
-      orientation: 'horizontal',
-      withBars: false,
-      cursor: false,
-      pearling: false,
-      disabled: false,
-      onBeforeChange: noop,
-      onChange: noop,
-      onAfterChange: noop,
-      onBarClick: noop,
-      onMouseDown: noop
-    };
-  },
-
-  // Mixin events
-  mixins: [event],
-
-  getInitialState: function () {
-    return {
-      index: -1, // TODO: find better solution
-      clicked: -1,
-      upperBound: 0,
-      axis: this.isHorizontal() ? 'X' : 'Y',
-      minProp: this.isHorizontal() ? 'left' : 'top',
-      maxProp: this.isHorizontal() ? 'right' : 'bottom',
-      value: []
-    };
-  },
-
-  isHorizontal: function () {
-    return this.props.orientation !== 'vertical';
-  },
-
-  componentWillMount: function () {
-    this.componentWillReceiveProps(this.props)
-    this.addEvent(window, 'resize', this.handleResize);
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    var range = nextProps.range || this.props.range,
-      range = (range ? (typeof range === 'boolean' ? [range, range] : range) : []),
-      header = range[0],
-      tailer = range[1],
-      min = nextProps.min || this.props.min,
-      max = nextProps.max || this.props.max,
-      min = typeof header === 'number' ? Math.max(header, min) : min,
-      max = typeof tailer === 'number' ? Math.min(Math.max(tailer, min), max) : max;
-    this.setState({
-      min: min,
-      max: max,
-      header: header,
-      tailer: tailer,
-      value: valueFormat(nextProps.value || this.props.value, max, min)
-    }, function () {
-      // Calculate the bound size again, if the bound size less than 0
-      if (this.state.upperBound <= 0) {
-        this.handleResize();
-      }
-    }.bind(this));
-  },
-
-  componentDidMount: function () {
-    this.handleResize();
-  },
-
-  componentWillUnmount: function () {
-    this.removeEvent(window, 'resize', this.handleResize);
-  },
-
-  getValue: function () {
-    return this.state.value
-  },
-
-  handleResize: function () {
-    var slider = this.refs.slider;
-    var handle = this.refs.header ? this.refs.header : {};
-    var rect = slider.getBoundingClientRect();
-
-    var size = this.isHorizontal() ? 'clientWidth' : 'clientHeight';
-
-    var sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
-    var sliderMin = rect[this.props.minProp];
-
-    this.setState({
-      upperBound: slider[size] - (handle[size] || 0)
-    });
-  },
-
-  handleDragStart: function (i, e) {
-    if (this.props.disabled) return;
-    // Make it possible to attach event handlers on top of this one
-    this.props.onMouseDown(e);
-    e = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-    var position = e['page' + this.state.axis];
-    var value = this.state.min,
-      l = this.state.value.length;
-    if (l != 0 && 0 < i && i <= l) {
-      value = this.state.value[i - 1].value;
-    } else if (i === l + 1) {
-      value = this.state.max;
-    }
-    this.setState({
-      startValue: value,
-      startPosition: position,
-      index: i,
-      clicked: -1
-    });
-
-    this.props.onBeforeChange(e, i - 1);
-
-    // Add event handlers
-    this.addEvent(window, this.dragEventFor['move'], this.handleDrag);
-    this.addEvent(window, this.dragEventFor['end'], this.handleDragEnd);
-    pauseEvent(e);
-  },
-
-  handleDrag: function (e) {
-    if (this.props.disabled) return;
-
-    e = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-    var position = e['page' + this.state.axis],
-      diffPosition = position - this.state.startPosition,
-      diffValue = (diffPosition / this.state.upperBound) * (this.props.max - this.props.min),
-      i = this.state.index,
-      l = this.state.value.length;
-    // Cursor position after moved
-    var _v = this.state.startValue + diffValue;
-    if (i === 0) {
-      // Move header
-      if (this.props.disabledHeader) return;
-      var v = l > 0 ? finder(Math.min, this.state.value, 'value') : this.state.max;
-      this.setState({
-        min: parseInt(Math.max(_v <= v ? (_v < 0 ? 0 : _v) : v, this.props.min), 10)
-      });
-    } else if (0 < i < l) {
-      // Move cursor
-      // The cursor postion must smaller than the next cursor or this.state.max
-      // bigger than the previous cursor or this.state.min
-      var value = this.state.value;
-      // var v = value[i - 1].value;
-      var min = (value[i - 2] ? value[i - 2].value : this.state.min);
-      var max = value[i] ? value[i].value : this.state.max;
-      value[i - 1].value = parseInt(Math.max(Math.min(_v, max), min), 10);
-      this.setState({
-        value: value
-      });
-    } else if (i === l + 1) {
-      // Move tailer
-      if (this.props.disabledTailer) return;
-      var v = l > 0 ? finder(Math.max, this.state.value, 'value') : this.state.min;
-      this.setState({
-        max: parseInt(Math.min(_v >= v ? _v : v, this.props.max))
-      });
-    }
-
-    this.props.onChange(e, i - 1, this.state.value);
-  },
-
-  handleDragEnd: function (e) {
-    this.setState({
-      index: -1
-    });
-
-    this.props.onAfterChange(e, this.state.value);
-
-    // Remove event handlers
-    this.removeEvent(window, this.dragEventFor['move'], this.handleDrag);
-    this.removeEvent(window, this.dragEventFor['end'], this.handleDragEnd);
-    e.stopPropagation();
-  },
-
-  handleBarClick: function (i, e) {
-    this.setState({
-      clicked: i
-    });
-    this.props.onBarClick(e, i, this.state.value[i]);
-  },
-
-  renderCursors: function (offsets) {
-    var cursors = [];
-    var l = this.state.value.length;
-    var opts = {
-      axis: this.state.axis,
-      size: l,
-      onDragEnd: this.handleDragEnd
-    }
-    if (this.props.cursor) {
-      cursors = offsets.map(function (offset, i) {
-        return Cursor(assign({}, opts, {
-          offset: offset,
-          position: i + 1,
-          ref: 'cursor' + (i + 1),
-          key: 'cursor' + (i + 1),
-          className: 'cursor cursor' + (i + 1),
-          value: this.state.value[i] ? this.state.value[i].value : null,
-          onDragStart: this.handleDragStart.bind(null, i + 1),
-        }))
-      }, this);
-    }
-    if (this.state.header) {
-      cursors.splice(0, 0, Cursor(assign({}, opts, {
-        offset: this.calcOffset(this.state.min),
-        position: 0,
-        ref: 'header',
-        key: 'header',
-        className: 'cursor header',
-        value: this.state.min,
-        onDragStart: this.handleDragStart.bind(null, 0)
-      })));
-    }
-    if (this.state.tailer) {
-      var l = cursors.length;
-      cursors.push(Cursor(assign({}, opts, {
-        offset: this.calcOffset(this.state.max),
-        position: l,
-        ref: 'tailer',
-        key: 'tailer',
-        className: 'cursor tailer',
-        value: this.state.max,
-        onDragStart: this.handleDragStart.bind(null, l + 1)
-      })))
-    }
-    return cursors;
-  },
-
-  // calculates the offset of a handle in pixels based on its value.
-  calcOffset: function (v) {
-    if (typeof v === 'undefined') return;
-    v = typeof v === 'number' ? v : v.value;
-    var ratio = (v - this.props.min) / (this.props.max - this.props.min);
-    return ratio * this.state.upperBound;
-  },
-
-  renderBar: function (from, to, i) {
-    var style = {
-      position: 'absolute',
-      backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : null
-    };
-    style[this.state.minProp] = from;
-    style[this.state.maxProp] = this.state.upperBound - to;
-    return React.createElement('div', {
-      key: 'bar' + i,
-      ref: 'bar' + i,
-      className: 'bar bar-' + i + (this.state.clicked === i ? ' active' : ''),
-      style: style,
-      onClick: this.handleBarClick.bind(this, i)
-    });
-  },
-
-  renderBars: function (offsets) {
-    var minOffset = this.calcOffset(this.state.min);
-    var bars = offsets.map(function (offset, i) {
-      return this.renderBar(offsets[i - 1] || minOffset, offset, i)
-    }, this);
-    if (bars.length === 0) {
-      bars.push(this.renderBar(minOffset, this.calcOffset(this.state.max), 0));
-    }
-    return bars;
-  },
-
-  render: function () {
-    var offsets = this.state.value.map(this.calcOffset, this);
-    var bars = this.props.withBars ? this.renderBars(offsets) : null;
-    var cursors = this.renderCursors(offsets);
-
-    return (
-      React.createElement('div', {
-          ref: 'slider',
-          style: {
-            position: 'relative'
-          },
-          className: 'range-slider ' + this.props.orientation
-        },
-        React.createElement('div', {
-          className: 'bars'
-        }, bars),
-        cursors
-      )
-    );
-  }
-});
+RangeSlider.defaultProps = {
+    min: 0,
+    max: 100,
+    value: [],
+    defaultValue: 0,
+    orientation: 'horizontal',
+    withBars: false,
+    cursor: false,
+    pearling: false,
+    disabled: false,
+    className: 'range-slider',
+    onBeforeChange: noop,
+    onChange: noop,
+    onAfterChange: noop,
+    onBarClick: noop,
+    onMouseDown: noop
+};
 
 module.exports = RangeSlider;
 
-
-},{"./Cursor":1,"./event":2,"object-assign":32,"react":163}],5:[function(require,module,exports){
+},{"./Cursor":2,"./event":3,"object-assign":32,"react":163}],5:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1203,11 +1423,14 @@ module.exports = focusNode;
  * @typechecks
  */
 
+/* eslint-disable fb-www/typeof-undefined */
+
 /**
  * Same as document.activeElement but wraps in a try-catch block. In IE it is
  * not safe to call document.activeElement if there is nothing focused.
  *
- * The activeElement will be null only if the document or document body is not yet defined.
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
  */
 'use strict';
 
@@ -1215,7 +1438,6 @@ function getActiveElement() /*?DOMElement*/{
   if (typeof document === 'undefined') {
     return null;
   }
-
   try {
     return document.activeElement || document.body;
   } catch (e) {
@@ -1461,7 +1683,7 @@ module.exports = hyphenateStyleName;
  * will remain to ensure logic does not differ in production.
  */
 
-var invariant = function (condition, format, a, b, c, d, e, f) {
+function invariant(condition, format, a, b, c, d, e, f) {
   if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -1475,15 +1697,16 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
     } else {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
-      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+      error = new Error(format.replace(/%s/g, function () {
         return args[argIndex++];
       }));
+      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
     throw error;
   }
-};
+}
 
 module.exports = invariant;
 }).call(this,require("pBGvAp"))
@@ -1748,18 +1971,23 @@ module.exports = performance || {};
 'use strict';
 
 var performance = require('./performance');
-var curPerformance = performance;
+
+var performanceNow;
 
 /**
  * Detect if we can use `window.performance.now()` and gracefully fallback to
  * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
  * because of Facebook's testing infrastructure.
  */
-if (!curPerformance || !curPerformance.now) {
-  curPerformance = Date;
+if (performance.now) {
+  performanceNow = function () {
+    return performance.now();
+  };
+} else {
+  performanceNow = function () {
+    return Date.now();
+  };
 }
-
-var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
 },{"./performance":27}],29:[function(require,module,exports){
@@ -5302,6 +5530,7 @@ var HTMLDOMPropertyConfig = {
     multiple: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
     muted: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
     name: null,
+    nonce: MUST_USE_ATTRIBUTE,
     noValidate: HAS_BOOLEAN_VALUE,
     open: HAS_BOOLEAN_VALUE,
     optimum: null,
@@ -5313,6 +5542,7 @@ var HTMLDOMPropertyConfig = {
     readOnly: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
     rel: null,
     required: HAS_BOOLEAN_VALUE,
+    reversed: HAS_BOOLEAN_VALUE,
     role: MUST_USE_ATTRIBUTE,
     rows: MUST_USE_ATTRIBUTE | HAS_POSITIVE_NUMERIC_VALUE,
     rowSpan: null,
@@ -5363,8 +5593,8 @@ var HTMLDOMPropertyConfig = {
      */
     // autoCapitalize and autoCorrect are supported in Mobile Safari for
     // keyboard hints.
-    autoCapitalize: null,
-    autoCorrect: null,
+    autoCapitalize: MUST_USE_ATTRIBUTE,
+    autoCorrect: MUST_USE_ATTRIBUTE,
     // autoSave allows WebKit/Blink to persist values of input fields on page reloads
     autoSave: null,
     // color is for Safari mask-icon link
@@ -5395,9 +5625,7 @@ var HTMLDOMPropertyConfig = {
     httpEquiv: 'http-equiv'
   },
   DOMPropertyNames: {
-    autoCapitalize: 'autocapitalize',
     autoComplete: 'autocomplete',
-    autoCorrect: 'autocorrect',
     autoFocus: 'autofocus',
     autoPlay: 'autoplay',
     autoSave: 'autosave',
@@ -5758,6 +5986,7 @@ assign(React, {
 });
 
 React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
+React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
 },{"./Object.assign":56,"./ReactDOM":69,"./ReactDOMServer":79,"./ReactIsomorphic":97,"./deprecated":140}],59:[function(require,module,exports){
@@ -9799,7 +10028,10 @@ var ReactDOMOption = {
       }
     });
 
-    nativeProps.children = content;
+    if (content) {
+      nativeProps.children = content;
+    }
+
     return nativeProps;
   }
 
@@ -9839,7 +10071,7 @@ function updateOptionsIfPendingUpdateAndMounted() {
     var value = LinkedValueUtils.getValue(props);
 
     if (value != null) {
-      updateOptions(this, props, value);
+      updateOptions(this, Boolean(props.multiple), value);
     }
   }
 }
@@ -10918,7 +11150,9 @@ var DOM_OPERATION_TYPES = {
   'setValueForProperty': 'update attribute',
   'setValueForAttribute': 'update attribute',
   'deleteValueForProperty': 'remove attribute',
-  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
+  'setValueForStyles': 'update styles',
+  'replaceNodeWithMarkup': 'replace',
+  'updateTextContent': 'set textContent'
 };
 
 function getTotalTime(measurements) {
@@ -15966,7 +16200,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.2';
+module.exports = '0.14.7';
 },{}],119:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17061,6 +17295,7 @@ var warning = require('fbjs/lib/warning');
  */
 var EventInterface = {
   type: null,
+  target: null,
   // currentTarget is set when dispatching; no use in copying it here
   currentTarget: emptyFunction.thatReturnsNull,
   eventPhase: null,
@@ -17094,8 +17329,6 @@ function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEvent
   this.dispatchConfig = dispatchConfig;
   this.dispatchMarker = dispatchMarker;
   this.nativeEvent = nativeEvent;
-  this.target = nativeEventTarget;
-  this.currentTarget = nativeEventTarget;
 
   var Interface = this.constructor.Interface;
   for (var propName in Interface) {
@@ -17106,7 +17339,11 @@ function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEvent
     if (normalize) {
       this[propName] = normalize(nativeEvent);
     } else {
-      this[propName] = nativeEvent[propName];
+      if (propName === 'target') {
+        this.target = nativeEventTarget;
+      } else {
+        this[propName] = nativeEvent[propName];
+      }
     }
   }
 
@@ -19702,4 +19939,4 @@ module.exports = validateDOMNesting;
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":58}]},{},[3])
+},{"./lib/React":58}]},{},[1])
