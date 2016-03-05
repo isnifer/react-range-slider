@@ -22,7 +22,7 @@ var App = React.createClass({
         return (
             <div>
                 <div className="header">
-                    <h1>React Range Slider</h1>
+                    <h1>React Range Slider BEM</h1>
                     <h4>A flexible Slider for reactjs</h4>
                 </div>
                 <div id="main">
