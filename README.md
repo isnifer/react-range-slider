@@ -1,14 +1,14 @@
 # React Range Slider BEM
 
-> A flexible slider for reactjs
+*A flexible slider for reactjs*
 
-[Live Demo](http://isnifer.github.io/react-range-slider-bem)
+###### [Demo](http://isnifer.github.io/react-range-slider-bem)
 
 ## Getting Started
 
 Install via [npm](http://npmjs.org/react-range-slider-bem)
 
-```bash
+```sh
 npm i react-range-slider-bem -S
 ```
 
@@ -23,12 +23,14 @@ render() {
         <RangeSlider value={[20]} withBars />
     );
 }
-
 ```
 
 ## Options
+
 #### min
-> Min value for slider, default is 0.
+Type: `Number`  
+Default: `0`  
+Description: Min value for slider, default is 0.  
 
 ```js
 // ...
@@ -40,9 +42,11 @@ render() {
 ```
 
 #### max
-> Max value for slider, default is 100.
+Type: `Number`  
+Default: `100`  
+Description: Max value for slider, default is 100.
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -52,7 +56,22 @@ render() {
 ```
 
 #### value
-> Define the value, can be string or array
+Type: 
+```js
+value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.number),
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.shape({
+            value: PropTypes.number,
+            color: PropTypes.string,
+        })),
+    ]),
+])
+```
+Default: `[]`  
+Description: Define the value, can be string or array
 
 ```jsx
 // ...
@@ -70,7 +89,9 @@ render() {
 ```
 
 #### orientation
-> Orientation for slider, must be horizontal or vertical, default is horizontal.
+Type: `PropTypes.oneOf(['horizontal', 'vertical'])`  
+Default: `horizontal`  
+Description: Orientation for slider, must be horizontal or vertical, default is horizontal.
 
 ```jsx
 // ...
@@ -82,19 +103,30 @@ render() {
 ```
 
 #### withBars
-> Options is slider show the bars or not, default false.
+Type: `Boolean`  
+Default: `false`  
+Description: Options is slider show the bars or not, default false.
 
 #### cursor
-> Options is slider show the cursors or not, default false.
-> You can also set up a custom cursor and implement like ./Cursor.js
+Type: `Boolean`  
+Default: `false`  
+Description: Options is slider show the cursors or not, default false. You can also set up a custom cursor and implement like ./Cursor.js
 
 #### disabled
-> Options disable slider, default false.
-> If set diabled with true cursors in the slider will unable to drag.
+Type: `Boolean`  
+Default: `false`  
+Description: Options disable slider, default false. If set diabled with true cursors in the slider will unable to drag.
 
 #### range
-> Range for slider, menas you can set header or tailer cursor or both, something like blow:
-> -|-----------|-
+Type:
+```js
+range: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.arrayOf(PropTypes.bool),
+    PropTypes.arrayOf(PropTypes.number),
+])
+```
+Description: Range for slider, menas you can set header or tailer cursor or both, something like blow: -|-----------|-
 
 ```jsx
 // ...
@@ -112,7 +144,8 @@ render() {
 ```
 
 #### disabledHeader
-> Disable slider header cursor.
+Type: `Boolean`  
+Description: Disable slider header cursor.
 
 ```jsx
 // ...
@@ -124,7 +157,8 @@ render() {
 ```
 
 #### disabledTailer
-> Disable slider tailer cursor.
+Type: `Boolean`  
+Description: Disable slider tailer cursor.
 
 ```jsx
 // ...
@@ -135,7 +169,9 @@ render() {
 }
 ```
 #### className
-> Slider classname
+Type: `String`  
+Default: `range-slider`  
+Description: Slider classname
 
 ```jsx
 // ...
@@ -147,7 +183,8 @@ render() {
 ```
 
 #### modClassName
-> Slider modifier classname
+Type: `String`  
+Description: Slider modifier classname
 
 ```jsx
 // ...
@@ -160,7 +197,9 @@ render() {
 > It will transform to `custom-slider_rating` on root element
 
 #### onMouseDown
-> Hook event for when mouse down for each cursor.
+Type: `Function`  
+Default: `function noop() {}`  
+Description: Hook event for when mouse down for each cursor.
 
 ```jsx
 // ...
@@ -172,16 +211,32 @@ render() {
 ```
 
 #### onBeforeChange
-> Hook function before cursor dragging
+Type: `Function`  
+Default: `function noop() {}`  
+Description: Hook function before cursor dragging
 
 #### onChange
-> Hook function when cursor dragging
+Type: `Function`  
+Default: `function noop() {}`  
+Description: Hook function when cursor dragging
 
 #### onAfterChange
-> Hook function after cursor dragging
+Type: `Function`  
+Default: `function noop() {}`  
+Description: Hook function after cursor dragging
 
 #### onBarClick
-> Click event for each bar
+Type: `Function`  
+Default: `function noop() {}`  
+Description: Click event for each bar
+
+```js
+/**
+ * @param {Object} Event click event instance.
+ * @param {Number} Index Index of the clicked bar.
+ * @param {String} Color Clicked bar's background color.
+ */
+```
 
 ```jsx
 // ...
@@ -190,13 +245,6 @@ render() {
         <RangeSlider onBarClick={somefunction(evt[, index, color])} />
     );
 }
-```
-```js
-/**
- * @param {Object} Event click event instance.
- * @param {Number} Index Index of the clicked bar.
- * @param {String} Color Clicked bar's background color.
- */
 ```
 
 ## License
