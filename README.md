@@ -73,7 +73,7 @@ value: PropTypes.oneOfType([
 Default: `[]`  
 Description: Define the value, can be string or array
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -93,7 +93,7 @@ Type: `PropTypes.oneOf(['horizontal', 'vertical'])`
 Default: `horizontal`  
 Description: Orientation for slider, must be horizontal or vertical, default is horizontal.
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -128,7 +128,7 @@ range: PropTypes.oneOfType([
 ```
 Description: Range for slider, menas you can set header or tailer cursor or both, something like blow: -|-----------|-
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -147,7 +147,7 @@ render() {
 Type: `Boolean`  
 Description: Disable slider header cursor.
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -160,7 +160,7 @@ render() {
 Type: `Boolean`  
 Description: Disable slider tailer cursor.
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -173,7 +173,7 @@ Type: `String`
 Default: `range-slider`  
 Description: Slider classname
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -186,7 +186,7 @@ render() {
 Type: `String`  
 Description: Slider modifier classname
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -201,7 +201,7 @@ Type: `Function`
 Default: `function noop() {}`  
 Description: Hook event for when mouse down for each cursor.
 
-```jsx
+```js
 // ...
 render() {
     return (
@@ -238,7 +238,7 @@ Description: Click event for each bar
  */
 ```
 
-```jsx
+```js
 // ...
 render() {
     return (
