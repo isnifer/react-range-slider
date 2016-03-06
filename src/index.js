@@ -7,7 +7,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import assign from 'object-assign';
-import { isTouchDevice, dragEventFor, addEvent, removeEvent } from './event';
+import { addEvent, removeEvent } from './event';
 import Cursor from './Cursor';
 
 const noop = () => {};
@@ -82,8 +82,6 @@ class RangeSlider extends Component {
             value: [],
         };
 
-        this.isTouchDevice = isTouchDevice.bind(this);
-        this.dragEventFor = dragEventFor;
         this.addEvent = addEvent.bind(this);
         this.removeEvent = removeEvent.bind(this);
 
@@ -149,51 +147,38 @@ class RangeSlider extends Component {
         // const sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
         // const sliderMin = rect[this.props.minProp];
 
-        this.setState({
-            upperBound: slider[size] - (handle[size] || 0),
-        });
+        this.setState({upperBound: slider[size] - (handle[size] || 0)});
     }
 
-    handleDragStart(i, e) {
+    handleDragStart(index, event) {
         if (this.props.disabled) {
             return;
         }
 
         // Make it possible to attach event handlers on top of this one
-        this.props.onMouseDown(e);
-        const currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-        const position = currentEvent[`page${this.state.axis}`];
-        let value = this.state.min;
-        const l = this.state.value.length;
+        this.props.onMouseDown(event);
+        const startPosition = event[`page${this.state.axis}`];
+        let startValue = this.state.min;
+        const {length} = this.state.value;
 
-        if (l !== 0 && i > 0 && i <= l) {
-            value = this.state.value[i - 1].value;
-        } else if (i === l + 1) {
-            value = this.state.max;
+        if (length !== 0 && index > 0 && index <= length) {
+            startValue = this.state.value[index - 1].value;
+        } else if (index === length + 1) {
+            startValue = this.state.max;
         }
 
-        this.setState({
-            startValue: value,
-            startPosition: position,
-            index: i,
-            clicked: -1,
-        });
-
-        this.props.onBeforeChange(currentEvent, i - 1);
-
-        // Add currentEvent handlers
-        this.addEvent(window, this.dragEventFor.move, this.handleDrag);
-        this.addEvent(window, this.dragEventFor.end, this.handleDragEnd);
-        pauseEvent(currentEvent);
+        const clicked = -1;
+        this.setState({startValue, startPosition, index, clicked});
+        this.props.onBeforeChange(event, index - 1);
+        pauseEvent(event);
     }
 
-    handleDrag(e) {
+    handleDrag(event) {
         if (this.props.disabled) {
             return;
         }
 
-        const currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-        const position = currentEvent[`page${this.state.axis}`];
+        const position = event[`page${this.state.axis}`];
         const diffPosition = position - this.state.startPosition;
         const diffValue = (diffPosition / this.state.upperBound) * (this.props.max - this.props.min);
         const i = this.state.index;
@@ -233,24 +218,21 @@ class RangeSlider extends Component {
             this.setState({value});
         } else if (i === l + 1) {
             // Move tailer
-            if (this.props.disabledTailer) return;
+            if (this.props.disabledTailer) {
+                return;
+            }
             const v = l > 0 ? finder(Math.max, this.state.value, 'value') : this.state.min;
             this.setState({
                 max: parseInt(Math.min(nextCursorPosition >= v ? nextCursorPosition : v, this.props.max), 10),
             });
         }
 
-        this.props.onChange(e, i - 1, this.state.value);
+        this.props.onChange(event, i - 1, this.state.value);
     }
 
     handleDragEnd(e) {
         this.setState({index: -1});
-
         this.props.onAfterChange(e, this.state.value);
-
-        // Remove event handlers
-        this.removeEvent(window, this.dragEventFor.move, this.handleDrag);
-        this.removeEvent(window, this.dragEventFor.end, this.handleDragEnd);
         e.stopPropagation();
     }
 
@@ -283,6 +265,7 @@ class RangeSlider extends Component {
             axis: this.state.axis,
             size: l,
             onDragEnd: this.handleDragEnd,
+            onDrag: this.handleDrag,
         };
 
         const className = `${this.props.className}__cursor`;

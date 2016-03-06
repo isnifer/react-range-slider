@@ -1,43 +1,4 @@
-// @credits: https://github.com/mzabriskie/react-draggable/blob/master/lib/draggable.js#L51-L120
-
-const event = {};
-
-/* Conditional to fix node server side rendering of component */
-const isTouchDevice = () => {
-    let flag = false;
-
-    // Check if is Browser
-    if (typeof window !== 'undefined') {
-        flag = 'ontouchstart' in window // works on most browsers
-        || 'onmsgesturechange' in window; // works on ie10 on ms surface
-    }
-
-    return flag;
-};
-
-event.isTouchDevice = isTouchDevice;
-
-/**
- * simple abstraction for dragging events names
- * */
-event.dragEventFor = (() => {
-    const eventsFor = {
-        touch: {
-            start: 'touchstart',
-            move: 'touchmove',
-            end: 'touchend',
-        },
-        mouse: {
-            start: 'mousedown',
-            move: 'mousemove',
-            end: 'mouseup',
-        },
-    };
-
-    return eventsFor[isTouchDevice() ? 'touch' : 'mouse'];
-})();
-
-event.addEvent = (el, evt, handler) => {
+const addEvent = (el, evt, handler) => {
     if (!el) {
         return;
     }
@@ -52,7 +13,7 @@ event.addEvent = (el, evt, handler) => {
     }
 };
 
-event.removeEvent = (el, evt, handler) => {
+const removeEvent = (el, evt, handler) => {
     if (!el) {
         return;
     }
@@ -67,4 +28,4 @@ event.removeEvent = (el, evt, handler) => {
     }
 };
 
-module.exports = event;
+module.exports = {addEvent, removeEvent};
