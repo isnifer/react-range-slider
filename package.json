@@ -4,10 +4,11 @@
   "description": "Fork of 'react-range-slider' with BEM naming",
   "main": "lib/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest",
-    "build": "babel src --out-dir lib",
+    "test": "./node_modules/.bin/tape -r babel-register test | tap-diff",
+    "build": "./node_modules/bin/babel src --out-dir lib",
     "watch": "./node_modules/.bin/gulp watch --gulpfile example/gulpfile.js",
-    "deploy": "./node_modules/.bin/gulp deploy --gulpfile example/gulpfile.js"
+    "deploy": "./node_modules/.bin/gulp deploy --gulpfile example/gulpfile.js",
+    "travis": "npm test"
   },
   "repository": {
     "type": "git",
@@ -21,20 +22,13 @@
     "range",
     "slider"
   ],
-  "jest": {
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
-    ],
-    "testPathIgnorePatterns": [
-      "/__tests__/[^/]*/.+"
-    ]
-  },
   "peerDependencies": {
     "react": ">=0.14.x"
   },
   "author": "Anton Kuznetsov <isnifer@gmail.com> (https://github.com/isnifer)",
   "license": "MIT",
   "devDependencies": {
+    "babel": "^6.5.2",
     "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-react-transform": "^2.0.0",
@@ -44,6 +38,7 @@
     "codemirror": "^4.6.0",
     "css-loader": "^0.23.1",
     "eggshell": "^0.1.20",
+    "enzyme": "^2.0.0",
     "eslint": "^2.2.0",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.1.0",
@@ -60,11 +55,15 @@
     "less-loader": "^2.2.2",
     "object-assign": "^3.0.0",
     "react": "^0.14.2",
+    "react-addons-test-utils": "^0.14.7",
     "react-dom": "^0.14.2",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.2",
     "reactify": "^1.1.1",
+    "sinon": "^1.17.3",
     "style-loader": "^0.13.0",
+    "tap-diff": "^0.1.1",
+    "tape": "^4.5.0",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
