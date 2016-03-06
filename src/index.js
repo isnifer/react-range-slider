@@ -138,7 +138,7 @@ class RangeSlider extends Component {
     }
 
     handleResize() {
-        const slider = this.refs.slider;
+        const {slider} = this.refs;
         const handle = this.refs.header ? this.refs.header : {};
         // const rect = slider.getBoundingClientRect();
 
@@ -147,6 +147,7 @@ class RangeSlider extends Component {
         // const sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
         // const sliderMin = rect[this.props.minProp];
 
+        console.log(this.refs);
         this.setState({upperBound: slider[size] - (handle[size] || 0)});
     }
 
@@ -366,7 +367,7 @@ class RangeSlider extends Component {
         const cursors = this.renderCursors(offsets);
         const {className, modClassName} = this.props;
         const mod = modClassName ? ` ${className}_${modClassName}` : '';
-        const rangeClassName = `${className} ${className}'_'${this.props.orientation}${mod}`;
+        const rangeClassName = `${className} ${className}_${this.props.orientation}${mod}`;
 
         return (
             <div className={rangeClassName} ref="slider" style={{position: 'relative'}}>
