@@ -58,6 +58,8 @@ var _objectAssign = require('object-assign');
 
 var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
+var _event = require('./event');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -67,6 +69,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var noop = function noop() {};
+var buildUnwrappingListener = function buildUnwrappingListener(listener) {
+    return function (e) {
+        var unwrappedEvent = e.changedTouches[e.changedTouches.length - 1];
+        unwrappedEvent.stopPropagation = e.stopPropagation.bind(e);
+        unwrappedEvent.preventDefault = e.preventDefault.bind(e);
+        return listener(unwrappedEvent);
+    };
+};
 
 var Cursor = function (_Component) {
     _inherits(Cursor, _Component);
@@ -75,6 +85,9 @@ var Cursor = function (_Component) {
         _classCallCheck(this, Cursor);
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cursor).call(this, props));
+
+        _this.addEvent = _event.addEvent.bind(_this);
+        _this.removeEvent = _event.removeEvent.bind(_this);
 
         _this.getStyle = _this.getStyle.bind(_this);
         _this.getProps = _this.getProps.bind(_this);
@@ -104,16 +117,45 @@ var Cursor = function (_Component) {
             var props = (0, _objectAssign2.default)({}, this.props);
             var zIndex = this.getZIndex();
             props.style = this.getStyle(zIndex);
-            props.onMouseDown = this.props.onDragStart;
-            props.onTouchStart = function (e) {
-                for (var _len = arguments.length, rest = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                    rest[_key - 1] = arguments[_key];
+
+            var mousemoveListener = props.onDrag;
+            var touchmoveListener = buildUnwrappingListener(mousemoveListener);
+            var _mouseupListener = undefined;
+            var touchendListener = undefined;
+
+            props.onMouseDown = function () {
+                for (var _len = arguments.length, rest = Array(_len), _key = 0; _key < _len; _key++) {
+                    rest[_key] = arguments[_key];
                 }
 
-                e.preventDefault(); // prevent for scroll
-                return _this2.props.onDragStart.apply(null, [e].concat(rest));
+                _this2.addEvent(window, 'mousemove', mousemoveListener);
+                _this2.addEvent(window, 'touchmove', touchmoveListener);
+                _this2.addEvent(window, 'mouseup', _mouseupListener);
+                _this2.addEvent(window, 'touchend', touchendListener);
+
+                return props.onDragStart.apply(null, rest);
             };
-            props.onMouseUp = props.onTouchEnd = this.props.onDragEnd;
+
+            props.onTouchStart = function (event) {
+                event.preventDefault(); // prevent for scroll
+                return buildUnwrappingListener(props.onMouseDown)(event);
+            };
+
+            _mouseupListener = function mouseupListener() {
+                for (var _len2 = arguments.length, rest = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    rest[_key2] = arguments[_key2];
+                }
+
+                _this2.removeEvent(window, 'mousemove', mousemoveListener);
+                _this2.removeEvent(window, 'touchmove', touchmoveListener);
+                _this2.removeEvent(window, 'mouseup', _mouseupListener);
+                _this2.removeEvent(window, 'touchend', touchendListener);
+
+                return props.onDragEnd.apply(null, rest);
+            };
+
+            touchendListener = buildUnwrappingListener(_mouseupListener);
+
             return props;
         }
     }, {
@@ -171,6 +213,7 @@ Cursor.propTypes = {
     axis: _react.PropTypes.oneOf(['X', 'Y']),
     offset: _react.PropTypes.number,
     onDragStart: _react.PropTypes.func,
+    onDrag: _react.PropTypes.func,
     onDragEnd: _react.PropTypes.func,
     value: _react.PropTypes.number,
     min: _react.PropTypes.number,
@@ -188,79 +231,40 @@ Cursor.defaultProps = {
 
 module.exports = Cursor;
 
-},{"object-assign":32,"react":163}],3:[function(require,module,exports){
-'use strict';
+},{"./event":3,"object-assign":32,"react":163}],3:[function(require,module,exports){
+"use strict";
 
-// @credits: https://github.com/mzabriskie/react-draggable/blob/master/lib/draggable.js#L51-L120
-
-var event = {};
-
-/* Conditional to fix node server side rendering of component */
-var isTouchDevice = function isTouchDevice() {
-    var flag = false;
-
-    // Check if is Browser
-    if (typeof window !== 'undefined') {
-        flag = 'ontouchstart' in window // works on most browsers
-         || 'onmsgesturechange' in window; // works on ie10 on ms surface
-    }
-
-    return flag;
-};
-
-event.isTouchDevice = isTouchDevice;
-
-/**
- * simple abstraction for dragging events names
- * */
-event.dragEventFor = function () {
-    var eventsFor = {
-        touch: {
-            start: 'touchstart',
-            move: 'touchmove',
-            end: 'touchend'
-        },
-        mouse: {
-            start: 'mousedown',
-            move: 'mousemove',
-            end: 'mouseup'
-        }
-    };
-
-    return eventsFor[isTouchDevice() ? 'touch' : 'mouse'];
-}();
-
-event.addEvent = function (el, evt, handler) {
+var addEvent = function addEvent(el, evt, handler) {
     if (!el) {
         return;
     }
 
     if (el.attachEvent) {
-        el.attachEvent('on' + evt, handler);
+        el.attachEvent("on" + evt, handler);
     } else if (el.addEventListener) {
         el.addEventListener(evt, handler, true);
     } else {
         /* eslint-disable no-param-reassign */
-        el['on' + evt] = handler;
+        el["on" + evt] = handler;
     }
 };
 
-event.removeEvent = function (el, evt, handler) {
+var removeEvent = function removeEvent(el, evt, handler) {
     if (!el) {
         return;
     }
 
     if (el.detachEvent) {
-        el.detachEvent('on' + evt, handler);
+        el.detachEvent("on" + evt, handler);
     } else if (el.removeEventListener) {
         el.removeEventListener(evt, handler, true);
     } else {
         /* eslint-disable no-param-reassign */
-        el['on' + evt] = null;
+        el["on" + evt] = null;
     }
 };
 
-module.exports = event;
+module.exports = { addEvent: addEvent, removeEvent: removeEvent };
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -374,8 +378,6 @@ var RangeSlider = function (_Component) {
             value: []
         };
 
-        _this.isTouchDevice = _event.isTouchDevice.bind(_this);
-        _this.dragEventFor = _event.dragEventFor;
         _this.addEvent = _event.addEvent.bind(_this);
         _this.removeEvent = _event.removeEvent.bind(_this);
 
@@ -451,53 +453,41 @@ var RangeSlider = function (_Component) {
             // const sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
             // const sliderMin = rect[this.props.minProp];
 
-            this.setState({
-                upperBound: slider[size] - (handle[size] || 0)
-            });
+            this.setState({ upperBound: slider[size] - (handle[size] || 0) });
         }
     }, {
         key: 'handleDragStart',
-        value: function handleDragStart(i, e) {
+        value: function handleDragStart(index, event) {
             if (this.props.disabled) {
                 return;
             }
 
             // Make it possible to attach event handlers on top of this one
-            this.props.onMouseDown(e);
-            var currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-            var position = currentEvent['page' + this.state.axis];
-            var value = this.state.min;
-            var l = this.state.value.length;
+            this.props.onMouseDown(event);
+            var startPosition = event['page' + this.state.axis];
+            var startValue = this.state.min;
+            var length = this.state.value.length;
 
-            if (l !== 0 && i > 0 && i <= l) {
-                value = this.state.value[i - 1].value;
-            } else if (i === l + 1) {
-                value = this.state.max;
+
+            if (length !== 0 && index > 0 && index <= length) {
+                startValue = this.state.value[index - 1].value;
+            } else if (index === length + 1) {
+                startValue = this.state.max;
             }
 
-            this.setState({
-                startValue: value,
-                startPosition: position,
-                index: i,
-                clicked: -1
-            });
-
-            this.props.onBeforeChange(currentEvent, i - 1);
-
-            // Add currentEvent handlers
-            this.addEvent(window, this.dragEventFor.move, this.handleDrag);
-            this.addEvent(window, this.dragEventFor.end, this.handleDragEnd);
-            pauseEvent(currentEvent);
+            var clicked = -1;
+            this.setState({ startValue: startValue, startPosition: startPosition, index: index, clicked: clicked });
+            this.props.onBeforeChange(event, index - 1);
+            pauseEvent(event);
         }
     }, {
         key: 'handleDrag',
-        value: function handleDrag(e) {
+        value: function handleDrag(event) {
             if (this.props.disabled) {
                 return;
             }
 
-            var currentEvent = this.isTouchDevice() ? e.changedTouches[e.changedTouches.length - 1] : e;
-            var position = currentEvent['page' + this.state.axis];
+            var position = event['page' + this.state.axis];
             var diffPosition = position - this.state.startPosition;
             var diffValue = diffPosition / this.state.upperBound * (this.props.max - this.props.min);
             var i = this.state.index;
@@ -538,25 +528,22 @@ var RangeSlider = function (_Component) {
                 this.setState({ value: value });
             } else if (i === l + 1) {
                 // Move tailer
-                if (this.props.disabledTailer) return;
+                if (this.props.disabledTailer) {
+                    return;
+                }
                 var v = l > 0 ? finder(Math.max, this.state.value, 'value') : this.state.min;
                 this.setState({
                     max: parseInt(Math.min(nextCursorPosition >= v ? nextCursorPosition : v, this.props.max), 10)
                 });
             }
 
-            this.props.onChange(e, i - 1, this.state.value);
+            this.props.onChange(event, i - 1, this.state.value);
         }
     }, {
         key: 'handleDragEnd',
         value: function handleDragEnd(e) {
             this.setState({ index: -1 });
-
             this.props.onAfterChange(e, this.state.value);
-
-            // Remove event handlers
-            this.removeEvent(window, this.dragEventFor.move, this.handleDrag);
-            this.removeEvent(window, this.dragEventFor.end, this.handleDragEnd);
             e.stopPropagation();
         }
     }, {
@@ -596,7 +583,8 @@ var RangeSlider = function (_Component) {
             var opts = {
                 axis: this.state.axis,
                 size: l,
-                onDragEnd: this.handleDragEnd
+                onDragEnd: this.handleDragEnd,
+                onDrag: this.handleDrag
             };
 
             var className = this.props.className + '__cursor';
