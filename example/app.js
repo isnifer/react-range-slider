@@ -1,22 +1,24 @@
 /* eslint-disable */
-var React = require('react');
-var ReactDOM = require('react-dom');
-var RangeSlider = require('../lib');
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import RangeSlider from '../lib';
 
 window.React = React;
 
-var App = React.createClass({
-    getInitialState() {
-        return {};
-    },
+class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+    }
 
     afterChange() {
         console.log('after change called');
-    },
+    }
 
     beforeChange() {
         console.log('before change called');
-    },
+    }
 
     render() {
         return (
@@ -37,8 +39,8 @@ var App = React.createClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}
 
-ReactDOM.render(<App />, document.getElementById('react-range-example'));
+render(<App />, document.getElementById('react-range-example'));
 
