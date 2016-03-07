@@ -147,7 +147,6 @@ class RangeSlider extends Component {
         // const sliderMax = rect[this.props.maxProp] - (handle[size] || 0);
         // const sliderMin = rect[this.props.minProp];
 
-        console.log(this.refs);
         this.setState({upperBound: slider[size] - (handle[size] || 0)});
     }
 
@@ -328,7 +327,7 @@ class RangeSlider extends Component {
     renderBar(from, to, i) {
         const style = {
             position: 'absolute',
-            backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : null,
+            backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : 'transparent',
             [this.state.minProp]: from,
             [this.state.maxProp]: this.state.upperBound - to,
         };
@@ -337,7 +336,6 @@ class RangeSlider extends Component {
         const modClassName = `${className} ${className}_`;
         const barClassName = modClassName + i + (this.state.clicked === i ? ` ${className}_active` : '');
 
-        // TODO: Update click handler
         return (
             <div
                 key={`bar_${i}`}
