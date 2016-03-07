@@ -1,4 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
 /* eslint-disable */
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -6,49 +8,67 @@ var RangeSlider = require('../lib');
 
 window.React = React;
 
-var App = React.createClass({displayName: "App",
-    getInitialState() {
+var App = React.createClass({
+    displayName: 'App',
+    getInitialState: function getInitialState() {
         return {};
     },
-
-    afterChange() {
+    afterChange: function afterChange() {
         console.log('after change called');
     },
-
-    beforeChange() {
+    beforeChange: function beforeChange() {
         console.log('before change called');
     },
-
-    render() {
-        return (
-            React.createElement("div", null, 
-                React.createElement("div", {className: "header"}, 
-                    React.createElement("h1", null, "React Range Slider BEM"), 
-                    React.createElement("h4", null, "A flexible Slider for reactjs")
-                ), 
-                React.createElement("div", {id: "main"}, 
-                    React.createElement(RangeSlider, {
-                        onBeforeChange: this.beforeChange, 
-                        onAfterChange: this.afterChange, 
-                        value: ['#42c6da', '#3cb9ec', '#42a5f5', '#4a80df', '#5c6bc0'], 
-                        range: [true], 
-                        withBars: true, 
-                        cursor: true}
-                    )
+    render: function render() {
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(
+                'div',
+                { className: 'header' },
+                React.createElement(
+                    'h1',
+                    null,
+                    'React Range Slider BEM'
+                ),
+                React.createElement(
+                    'h4',
+                    null,
+                    'A flexible Slider for reactjs'
                 )
+            ),
+            React.createElement(
+                'div',
+                { id: 'main' },
+                React.createElement(RangeSlider, {
+                    onBeforeChange: this.beforeChange,
+                    onAfterChange: this.afterChange,
+                    value: ['#42c6da', '#3cb9ec', '#42a5f5', '#4a80df', '#5c6bc0'],
+                    range: [true],
+                    withBars: true,
+                    cursor: true
+                })
             )
         );
-    },
+    }
 });
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('react-range-example'));
 
-
-
 },{"../lib":4,"react":163,"react-dom":34}],2:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _react = require('react');
 
@@ -60,13 +80,27 @@ var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 var _event = require('./event');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
 var noop = function noop() {};
 var buildUnwrappingListener = function buildUnwrappingListener(listener) {
@@ -190,19 +224,7 @@ var Cursor = function (_Component) {
         key: 'render',
         value: function render() {
             var props = this.getProps();
-            return _react2.default.createElement(
-                'div',
-                props,
-                _react2.default.createElement(
-                    'span',
-                    null,
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        this.props.value
-                    )
-                )
-            );
+            return _react2.default.createElement('div', props, _react2.default.createElement('span', null, _react2.default.createElement('span', null, this.props.value)));
         }
     }]);
 
@@ -269,14 +291,28 @@ module.exports = { addEvent: addEvent, removeEvent: removeEvent };
 },{}],4:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /*
-                                                                                                                                                                                                                                                   * react-range-slider-bem - index.js
-                                                                                                                                                                                                                                                   * Copyright(c) 2015 xeodou <xeodou@gmail.com>
-                                                                                                                                                                                                                                                   * Copyright(c) 2016 isnifer <isnifer@gmail.com>
-                                                                                                                                                                                                                                                   * MIT Licensed
-                                                                                                                                                                                                                                                   */
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+}; /*
+    * react-range-slider-bem - index.js
+    * Copyright(c) 2015 xeodou <xeodou@gmail.com>
+    * Copyright(c) 2016 isnifer <isnifer@gmail.com>
+    * MIT Licensed
+    */
 
 var _react = require('react');
 
@@ -292,15 +328,35 @@ var _Cursor = require('./Cursor');
 
 var _Cursor2 = _interopRequireDefault(_Cursor);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _defineProperty(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+        obj[key] = value;
+    }return obj;
+}
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
 var noop = function noop() {};
 
@@ -445,6 +501,7 @@ var RangeSlider = function (_Component) {
         key: 'handleResize',
         value: function handleResize() {
             var slider = this.refs.slider;
+
             var handle = this.refs.header ? this.refs.header : {};
             // const rect = slider.getBoundingClientRect();
 
@@ -467,7 +524,6 @@ var RangeSlider = function (_Component) {
             var startPosition = event['page' + this.state.axis];
             var startValue = this.state.min;
             var length = this.state.value.length;
-
 
             if (length !== 0 && index > 0 && index <= length) {
                 startValue = this.state.value[index - 1].value;
@@ -649,14 +705,13 @@ var RangeSlider = function (_Component) {
 
             var style = (_style = {
                 position: 'absolute',
-                backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : null
+                backgroundColor: this.state.value.length > 0 ? this.state.value[i].color : 'transparent'
             }, _defineProperty(_style, this.state.minProp, from), _defineProperty(_style, this.state.maxProp, this.state.upperBound - to), _style);
 
             var className = this.props.className + '__bar';
             var modClassName = className + ' ' + className + '_';
             var barClassName = modClassName + i + (this.state.clicked === i ? ' ' + className + '_active' : '');
 
-            // TODO: Update click handler
             return _react2.default.createElement('div', {
                 key: 'bar_' + i,
                 ref: 'bar_' + i,
@@ -692,18 +747,9 @@ var RangeSlider = function (_Component) {
             var modClassName = _props.modClassName;
 
             var mod = modClassName ? ' ' + className + '_' + modClassName : '';
-            var rangeClassName = className + ' ' + className + '\'_\'' + this.props.orientation + mod;
+            var rangeClassName = className + ' ' + className + '_' + this.props.orientation + mod;
 
-            return _react2.default.createElement(
-                'div',
-                { className: rangeClassName, ref: 'slider', style: { position: 'relative' } },
-                _react2.default.createElement(
-                    'div',
-                    { className: className + '__bars' },
-                    bars
-                ),
-                cursors
-            );
+            return _react2.default.createElement('div', { className: rangeClassName, ref: 'slider', style: { position: 'relative' } }, _react2.default.createElement('div', { className: className + '__bars' }, bars), cursors);
         }
     }]);
 
