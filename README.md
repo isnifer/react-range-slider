@@ -1,7 +1,7 @@
 # React Range Slider BEM
 [![NPM](https://badge.fury.io/js/react-range-slider-bem.svg)](https://npmjs.org/react-range-slider-bem)
-[![DEPS](https://david-dm.org/isnifer/react-range-slider-bem.svg)](https://npmjs.org/react-range-slider-bem)
-
+[![DEPS](https://david-dm.org/isnifer/react-range-slider-bem.svg)](https://david-dm.org/isnifer/react-range-slider-bem)
+[![TRAVIS](https://travis-ci.org/isnifer/react-range-slider-bem.svg)](https://travis-ci.org/isnifer/react-range-slider-bem)
 
 *A flexible slider for reactjs*
 
