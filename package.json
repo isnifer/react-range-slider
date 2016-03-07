@@ -1,6 +1,6 @@
 {
   "name": "react-range-slider-bem",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Fork of 'react-range-slider' with BEM naming",
   "main": "lib/index.js",
   "scripts": {
