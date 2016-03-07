@@ -10,6 +10,8 @@ body {
     font-size: 16px;
     position: relative;
     text-align: center;
+    margin: 0;
+    font-family: Tahoma;
 }
 
 #main {
@@ -31,29 +33,7 @@ body {
     h5,
     h6 {
         color: $white;
-    }
-}
-
-.example {
-    margin-bottom: 40px;
-
-    .title {
-        font-size: 2.0rem;
-    }
-
-    .result {
-        font-size: 1.4rem;
-        display: block;
-    }
-
-    .show {
-        margin-top: 20px;
-        font-size: 1.6rem;
-        border-radius: 5px;
-        border: 1px solid transparent;
-        border-color: $grey;
-        padding: $gutter/8;
-        min-width: 100px;
+        font-weight: normal;
     }
 }
 
@@ -61,7 +41,7 @@ body {
     color: #FFF;
     font-size: 14px;
     line-height: 140%;
-    border-radius: $radius;
+    border-radius: 5px;
     border-color: #000;
     top: 0px;
     left: 0px;

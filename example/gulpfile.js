@@ -10,9 +10,7 @@ var root = path.resolve(__dirname)
 // Sass
 gulp.task('sass', function() {
     return gulp.src(root + '/style.scss')
-        .pipe(sass({
-            includePaths: require('eggshell').includePaths
-        }))
+        .pipe(sass())
         .pipe(gulp.dest(root + '/build'))
         .pipe($.size());
 });
