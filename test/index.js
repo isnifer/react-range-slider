@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'enzyme';
 import { spy } from 'sinon';
 import test from 'tape';
-import RangeSlider from '../lib';
+import RangeSlider from '../src';
 
 test('Init', t => {
     const value = ['#42c6da', '#3cb9ec', '#42a5f5', '#4a80df', '#5c6bc0'];
