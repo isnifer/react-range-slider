@@ -29,8 +29,8 @@ render() {
 ## Options
 
 #### min
-Type: `Number`
-Default: `0`
+Type: `Number`  
+Default: `0`  
 Description: Min value for slider, default is 0.
 
 ```js
@@ -43,8 +43,8 @@ render() {
 ```
 
 #### max
-Type: `Number`
-Default: `100`
+Type: `Number`  
+Default: `100`  
 Description: Max value for slider, default is 100.
 
 ```js
@@ -71,7 +71,7 @@ value: PropTypes.oneOfType([
     ]),
 ])
 ```
-Default: `[]`
+Default: `[]`  
 Description: Define the value, can be string or array
 
 ```js
@@ -90,8 +90,8 @@ render() {
 ```
 
 #### orientation
-Type: `PropTypes.oneOf(['horizontal', 'vertical'])`
-Default: `horizontal`
+Type: `PropTypes.oneOf(['horizontal', 'vertical'])`  
+Default: `horizontal`  
 Description: Orientation for slider, must be horizontal or vertical, default is horizontal.
 
 ```js
@@ -104,18 +104,18 @@ render() {
 ```
 
 #### withBars
-Type: `Boolean`
-Default: `false`
+Type: `Boolean`  
+Default: `false`  
 Description: Options is slider show the bars or not, default false.
 
 #### cursor
-Type: `Boolean`
-Default: `false`
+Type: `Boolean`  
+Default: `false`  
 Description: Options is slider show the cursors or not, default false. You can also set up a custom cursor and implement like ./Cursor.js
 
 #### disabled
-Type: `Boolean`
-Default: `false`
+Type: `Boolean`  
+Default: `false`  
 Description: Options disable slider, default false. If set diabled with true cursors in the slider will unable to drag.
 
 #### range
@@ -145,7 +145,7 @@ render() {
 ```
 
 #### disabledHeader
-Type: `Boolean`
+Type: `Boolean`  
 Description: Disable slider header cursor.
 
 ```js
@@ -158,7 +158,7 @@ render() {
 ```
 
 #### disabledTailer
-Type: `Boolean`
+Type: `Boolean`  
 Description: Disable slider tailer cursor.
 
 ```js
@@ -170,8 +170,8 @@ render() {
 }
 ```
 #### className
-Type: `String`
-Default: `range-slider`
+Type: `String`  
+Default: `range-slider`  
 Description: Slider classname
 
 ```js
@@ -184,7 +184,7 @@ render() {
 ```
 
 #### modClassName
-Type: `String`
+Type: `String`  
 Description: Slider modifier classname
 
 ```js
@@ -198,8 +198,8 @@ render() {
 > It will transform to `custom-slider_rating` on root element
 
 #### onMouseDown
-Type: `Function`
-Default: `function noop() {}`
+Type: `Function`  
+Default: `function noop() {}`  
 Description: Hook event for when mouse down for each cursor.
 
 ```js
@@ -212,23 +212,23 @@ render() {
 ```
 
 #### onBeforeChange
-Type: `Function`
-Default: `function noop() {}`
+Type: `Function`  
+Default: `function noop() {}`  
 Description: Hook function before cursor dragging
 
 #### onChange
-Type: `Function`
-Default: `function noop() {}`
+Type: `Function`  
+Default: `function noop() {}`  
 Description: Hook function when cursor dragging
 
 #### onAfterChange
-Type: `Function`
-Default: `function noop() {}`
+Type: `Function`  
+Default: `function noop() {}`  
 Description: Hook function after cursor dragging
 
 #### onBarClick
-Type: `Function`
-Default: `function noop() {}`
+Type: `Function`  
+Default: `function noop() {}`  
 Description: Click event for each bar
 
 ```js
